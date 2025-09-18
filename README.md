@@ -1,2 +1,2 @@
 # c_language
-learning cc by practice.
+learning cc by practice.hey!
