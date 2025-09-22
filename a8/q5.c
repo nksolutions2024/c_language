@@ -12,13 +12,10 @@ struct form{
 
 int main(){
 	int i;
-//	char bookname[20];	
-//	scanf("%s", bookname );
-//	printf("\n %s \n", bookname);
-	
-	
+
 	scanf("%s", emp_list[0].name);
 	scanf("%d", &emp_list[0].age);
+	scanf("%s", emp_list[0].gender);
 	scanf("%d", &emp_list[0].pincode);
 	scanf("%d", &emp_list[0].salary);
 				
@@ -26,6 +23,7 @@ int main(){
 	{
 		printf("\n %s \n", emp_list[i].name);
 		printf("\n %d \n", emp_list[i].age);
+		printf("\n %s \n", emp_list[i].gender);
 		printf("\n %d \n", emp_list[i].pincode);
 		printf("\n %d \n", emp_list[i].salary);
 	}
