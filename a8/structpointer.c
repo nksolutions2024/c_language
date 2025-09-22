@@ -3,7 +3,6 @@
 
 struct player_info{
 	int id;
-	int age;
 };
 
 int main(){
@@ -19,8 +18,8 @@ int main(){
 ////////////////////////////////////////////////////////////////////
 	p[0] = (struct player_info *)malloc(sizeof(struct player_info));
 
-	scanf("%d",&p[0]->id);
-
+	scanf("%d",&s_ptr->id);
+	p[0] = s_ptr;
 	printf("\n %d \n", p[0]->id);
 
 
