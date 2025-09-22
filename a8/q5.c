@@ -15,7 +15,7 @@ int main(){
 	char bookname[80];
 
 	
-	scanf("%s", &bookname );
+	scanf("%s", bookname );
 	printf("\n %80s \n", bookname);
 /*	
 //	scanf("%s", &emp_list[0].name);
