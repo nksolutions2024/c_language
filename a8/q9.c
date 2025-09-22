@@ -28,7 +28,7 @@ int main(){
 		s_ptr = (struct student_data *)ptr;
 		
 		printf("\n Enter age of student-%d: ", no_of_students+1);
-		scanf("%d", s_ptr->age);
+		scanf("%d", &s_ptr->age);
 
 		blue[no_of_students] = (struct student_data*)malloc(sizeof(struct student_data));
 		blue[no_of_students] = s_ptr;
