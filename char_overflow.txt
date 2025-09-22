@@ -1,0 +1,56 @@
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ gcc datatype.c 
+datatype.c: In function ‘main’:
+datatype.c:5:17: warning: overflow in conversion from ‘int’ to ‘char’ changes value from ‘-132’ to ‘124’ [-Woverflow]
+    5 |         char dh=-132;
+      |                 ^
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ cat datatype.c 
+#include<stdio.h>
+
+void main(){
+	char ch=128;
+	char dh=-132;
+	printf("%hhd %hhd \n", ch, dh);
+}
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ ./a.out
+-128 124 
+
+----------------------------
+
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ gcc datatype.c 
+datatype.c: In function ‘main’:
+datatype.c:5:24: warning: overflow in conversion from ‘int’ to ‘signed char’ changes value from ‘-132’ to ‘124’ [-Woverflow]
+    5 |         signed char dh=-132;
+      |                        ^
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ ./a.out
+-128 124 
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ cat datatype.c 
+#include<stdio.h>
+
+void main(){
+	signed char ch=128;
+	signed char dh=-132;
+	printf("%hhd %hhd \n", ch, dh);
+}
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ 
+
+---------------------------------------
+
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ gcc datatype.c 
+datatype.c: In function ‘main’:
+datatype.c:5:26: warning: unsigned conversion from ‘int’ to ‘unsigned char’ changes value from ‘-132’ to ‘124’ [-Woverflow]
+    5 |         unsigned char dh=-132;
+      |                          ^
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ ./a.out
+-128 124 
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ cat datatype.c 
+#include<stdio.h>
+
+void main(){
+	unsigned char ch=128;
+	unsigned char dh=-132;
+	printf("%hhd %hhd \n", ch, dh);
+}
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language$ 
+
+
+
