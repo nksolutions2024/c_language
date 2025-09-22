@@ -20,7 +20,7 @@ int main(){
 	
 	int yes=1;
 //	while(yes == 0)
-	for(i=0; i<4; i++)
+	for(i=0; i<1; i++)
 	{
 		printf("Enter value of YES(1 or 0) : ");
 //		scanf("%d", &yes);
@@ -32,17 +32,17 @@ int main(){
 		
 		printf("\n Enter name of student-%d: ", no_of_students+1);
 		scanf("%s", s_ptr->name);
-		printf("\n Enter age of student-%d: ", no_of_students+1);
-		scanf("%d", &s_ptr->age);
+//		printf("\n Enter age of student-%d: ", no_of_students+1);
+//		scanf("%d", &s_ptr->age);
 
-		blue[no_of_students++] = s_ptr;
+		blue[no_of_students] = s_ptr;
 	}
 
 	//try function in next phase			
 	for(i=0; i<1; i++)
 	{
-		printf("\n %s \n", blue[i]->name);
-		printf("\n %d \n", blue[i]->age);
+		printf("\n %s \n", *blue[i]->name);
+//		printf("\n %d \n", student_data[i]->age);
 	}
 
 	return 0;
