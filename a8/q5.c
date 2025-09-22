@@ -12,25 +12,24 @@ struct form{
 
 int main(){
 	int i;
-	char bookname[80];
-
+//	char bookname[20];	
+//	scanf("%s", bookname );
+//	printf("\n %s \n", bookname);
 	
-	scanf("%s", bookname );
-	printf("\n %80s \n", bookname);
-/*	
-//	scanf("%s", &emp_list[0].name);
+	
+	scanf("%s", emp_list[0].name);
 	scanf("%d", &emp_list[0].age);
 	scanf("%d", &emp_list[0].pincode);
 	scanf("%d", &emp_list[0].salary);
 				
 	for(i=0; i<1; i++)
 	{
-//		printf("\n %c \n", emp_list[i].name);
+		printf("\n %s \n", emp_list[i].name);
 		printf("\n %d \n", emp_list[i].age);
 		printf("\n %d \n", emp_list[i].pincode);
 		printf("\n %d \n", emp_list[i].salary);
 	}
-*/
+
 
 	return 0;
 }
