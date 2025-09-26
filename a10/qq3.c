@@ -17,9 +17,10 @@ int main(){
 	//put string in file	
 	fputs(str, fp);
 
+	printf("checkpoint 1\n");
 	printf("file pointer position = %ld\n", ftell(fp));
 
-/*
+
 	char read[100];
 	while(fgets(read, 100, fp) != NULL)
 	{
@@ -27,7 +28,6 @@ int main(){
 	}
 
 	fclose(fp);
-*/
 
 	return 0;
 }
