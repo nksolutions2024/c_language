@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 int main(){
-	FILE *fp = fopen("data2.txt", "w+");
+	FILE *fp = fopen("data1.txt", "w+");
 
 	if(fp == NULL)
 	{
@@ -26,8 +26,12 @@ int main(){
 	{
 		puts(read);
 	}
+	printf("%c %c\n", read[0], read[1]);
 
 	fclose(fp);
+	
+//	printf("%c %c\n", read[0], read[1]);
+
 
 	return 0;
 }
