@@ -10,8 +10,8 @@ int main(){
 	}
 
 	fputs("Hello, djnj fdnn fndnjn fndffl!!", fp);
-//	fseek("fp, 6, SEEK_SET");
-	printf("Position (not yet) after SEEK_SET(6): %ld\n", ftell(fp));	
+	fseek(fp, 6, SEEK_SET);
+	printf("Position after SEEK_SET(6): %ld\n", ftell(fp));	
 
 	return 0;
 }
