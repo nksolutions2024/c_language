@@ -13,5 +13,27 @@ int main(){
 	fseek(fp, 6, SEEK_SET);
 	printf("Position after SEEK_SET(6): %ld\n", ftell(fp));	
 
+	for(int i=0; i<2; i++)
+	{
+		char ch = fgetc(fp);
+		printf("\n %c \t",ch);
+		fp++;
+	}
+
+	//move 2 bytes forward from current position
+	fseek(fp, 2, SEEK_CUR);
+	printf("position after SEEK_CUR(2): %ld\n", ftell(fp));
+
+	//back from end of file ; SEEK_END(-5)
+	
+	fclose(fp);
+
 	return 0;
 }
+
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language/a10$ ./a.out
+Position after SEEK_SET(6): 6
+
+Fatal error: glibc detected an invalid stdio handle
+Aborted (core dumped)
+
