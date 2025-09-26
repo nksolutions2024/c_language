@@ -2,7 +2,6 @@
 
 int main(){
 	FILE *fp = fopen("data2.txt", "w+");
-//	FILE *fp = fopen("data1.txt", "a+");
 
 	if(fp == NULL)
 	{
@@ -11,37 +10,16 @@ int main(){
 	}
 	printf("file pointer position = %ld\n", ftell(fp));
 
-//	char ch1 = 'A';
 	char str[100];
 
-//	fputc(ch1, fp);
 	fgets(str , sizeof(str), stdin);
 
-//	printf("file pointer position = %ld\n", ftell(fp));
-//	rewind(fp);
-/*
-	size_t len = 0;
-	while (str[len] != '\0')
-	{
-		len++;
-	}
-	if (len > 0 && str[len-1] == '\n')
-	{
-		str[len-1] = '\0';
-	}
-*/	
+	//put string in file	
 	fputs(str, fp);
 
-
-
 	printf("file pointer position = %ld\n", ftell(fp));
+
 /*
-	char ch;
-	while((ch = fgetc(fp)) != EOF)
-	{
-		printf("the char is = %c\n", ch);
-	}
-*/
 	char read[100];
 	while(fgets(read, 100, fp) != NULL)
 	{
@@ -49,7 +27,7 @@ int main(){
 	}
 
 	fclose(fp);
-
+*/
 
 	return 0;
 }
