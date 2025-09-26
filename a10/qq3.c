@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 int main(){
-	FILE *fp = fopen("data1.txt", "w+");
+	FILE *fp = fopen("data2.txt", "w+");
 //	FILE *fp = fopen("data1.txt", "a+");
 
 	if(fp == NULL)
@@ -42,6 +42,12 @@ int main(){
 		printf("the char is = %c\n", ch);
 	}
 */
+	char read[100];
+	while(fgets(read, 100, fp) != NULL)
+	{
+		puts(read);
+	}
+
 	fclose(fp);
 
 
