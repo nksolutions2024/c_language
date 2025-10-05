@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 struct node{
 	int data;
@@ -21,7 +22,7 @@ int main(){
 	scanf("%d", &choice);
 
 	switch(choice){
-		case 1: printf(enter ele \n);
+		case 1: printf("enter ele \n");
 			scanf("%d", &ele);
 			insert(ele);
 			break;
