@@ -47,6 +47,7 @@ void insert(int ele){
 	struct node* t1;
 	t1=head;
 
+	//purpose of it ?
 	while(t1->next != NULL){
 		t1=t1->next;
 	}
