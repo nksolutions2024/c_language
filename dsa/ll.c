@@ -46,16 +46,18 @@ void insert(int ele){
 
 	if (head == NULL){
 		head = temp;
-		return;
+		return;   //leave the function from here directly
 	}
 
 	struct node* t1;
 	t1=head;
 
-	//purpose of it ?
+	//purpose of it 
+	//reaching to last element
 	while(t1->next != NULL){
 		t1=t1->next;
 	}
+	//finally
 	t1->next = temp;
 
 }
@@ -72,31 +74,3 @@ void display(){
 	printf("\n");
 }
 
-/*
-enter 1->insert 2->display 3->exit
-1
-enter ele
-10
-enter 1->insert 2->display 3->exit
-1
-enter ele
-20
-enter 1->insert 2->display 3->exit
-1
-enter ele
-30
-enter 1->insert 2->display 3->exit
-2
-linklist
--->[10]-->[20]-->[30]
-enter 1->insert 2->display 3->exit
-1
-enter ele
-40
-enter 1->insert 2->display 3->exit
-2
-linklist
--->[10]-->[20]-->[30]-->[40]
-enter 1->insert 2->display 3->exit
-3
-*/
