@@ -2,8 +2,13 @@
 void sort(int arr[], int n);
 
 int main(){
-	arr[5]={10,30,50,40,20};
+	int arr[5]={10,30,50,40,20};
 	sort(arr, 5); //calling function
+	
+	for(int i; i<5; i++)
+	{
+		printf("%d\n",arr[i]);
+	}
 }
 
 void sort(int arr[], int n){
