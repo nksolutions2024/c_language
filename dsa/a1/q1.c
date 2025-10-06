@@ -14,7 +14,7 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter the 1->insert 2->display 3->exit 4->deleteByIndex 5->deleteByEle : ");
+		printf("Enter the 1->insert 2->display 3->exit 4->deleteByIndex 5->deleteByEle 6-> : ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -46,6 +46,8 @@ int main(){
 }
 
 void insertAtIndex(int n,int index){
+
+	// index above 4 ,warning
 
 	if(arr[index] == -99)
 	{
@@ -86,5 +88,20 @@ void deleteByEle(int ele)
 		{
 			arr[i]=-99;
 		}
+		//consider case of not found
 	}
+}
+
+int arrMin(){
+	//assume arr[0] is Min 
+	//assuming arr[0] is not -99
+	minIndex = 0;
+	for(int i; i<5; i++)
+	{
+		if(arr[i]<arr[minIndex] && arr[i]!=-99)
+		{
+			minIndex=i;
+		}
+	}
+	return minIndex;
 }
