@@ -1,22 +1,28 @@
 #include<stdio.h>
 #include<stdlib.h>
-
 int arr[5]= {-99,-99,-99,-99,-99};
+#include "myheader.h" //includine the header file
 
+//int arr[5]= {-99,-99,-99,-99,-99};
+
+/*
 void insertAtIndex(int n,int index);
 void display();
 void deleteByIndex(int index);
 void deleteByEle(int ele);
 int arrMin();
 int arrMax();
+*/
 
 int main(){
 	int u_index,u_value;
 	int choice;
+	printf("0855");
 
 	while(1)
 	{
-		printf("Enter the 1->insert 2->display 3->exit 4->deleteByIndex 5->deleteByEle 6->arrMin 7->arrMax: ");
+		printf("Enter 1->insert 2->display 3->exit 4->delByIndex ");
+	      	printf("5->deleteByEle 6->arrMin 7->arrMax: ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -48,11 +54,10 @@ int main(){
 	}
 
 }
-
+/*
 void insertAtIndex(int n,int index){
-
 	// index above 4 ,warning
-
+	//
 	if(arr[index] == -99)
 	{
 		arr[index]=n;
@@ -109,3 +114,4 @@ int arrMin(){
 	}
 	return minIndex;
 }
+*/
