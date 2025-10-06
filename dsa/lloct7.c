@@ -10,13 +10,14 @@ struct node* head = NULL; //pointer to first node
 
 void insertAtEnd(int ele);
 void display();
+void insertAtBeg(int ele);
 
 int main(){
 	int choice,ele;
 
 	while(1)
 	{
-		printf("Enter 1->insert 2->display 3->exit \n");
+		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg \n");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -28,6 +29,12 @@ int main(){
 
 			case 2:
 				display();
+				break;
+
+			case 4:
+				printf("enter ele: ");
+				scanf("%d",&ele);
+				insertAtBeg(ele);
 				break;
 
 			case 3:
@@ -52,11 +59,11 @@ void insertAtEnd(int ele){
 	}
 
 	//made mistake of ELSE BLOCK
-		//traverse to last node
-		while(t1->next != NULL)
-		{
-			t1=t1->next; //jumped
-		}
+	//traverse to last node
+	while(t1->next != NULL)
+	{
+		t1=t1->next; //jumped
+	}
 	
 	//last node link is changed
 	t1->next = temp ;
@@ -72,4 +79,22 @@ void display(){
 		printf("-->[%d]", t2->data);
 		t2 = t2->next;
 	}
+	printf("\n");
 }
+
+void insertAtBeg(int ele){
+	struct node * temp;
+	temp=(struct node *)malloc(sizeof(struct node));
+	temp->data = ele;
+	temp->next = NULL;
+
+	//scenario ll exits
+//	struct node * t4;
+//	t4=head;
+	temp->next = head;//A
+	head=temp;
+}
+
+
+
+	
