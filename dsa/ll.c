@@ -30,7 +30,7 @@ int main(){
 			display();
 			break;
 		case 3: 
-			exit(1);
+			exit(0);
 	}
 	}
 
@@ -43,6 +43,11 @@ void insert(int ele){
 
 	temp->data = ele;
 	temp->next = NULL;
+
+	if (head == NULL){
+		head = temp;
+		return;
+	}
 
 	struct node* t1;
 	t1=head;
@@ -67,3 +72,31 @@ void display(){
 	printf("\n");
 }
 
+/*
+enter 1->insert 2->display 3->exit
+1
+enter ele
+10
+enter 1->insert 2->display 3->exit
+1
+enter ele
+20
+enter 1->insert 2->display 3->exit
+1
+enter ele
+30
+enter 1->insert 2->display 3->exit
+2
+linklist
+-->[10]-->[20]-->[30]
+enter 1->insert 2->display 3->exit
+1
+enter ele
+40
+enter 1->insert 2->display 3->exit
+2
+linklist
+-->[10]-->[20]-->[30]-->[40]
+enter 1->insert 2->display 3->exit
+3
+*/

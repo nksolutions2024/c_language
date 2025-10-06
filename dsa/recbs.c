@@ -22,7 +22,7 @@ int rbinSearch(int arr[], int start, int end, int x){
 }
 
 int main(){
-	int arr[]={10,20,30};
+	int arr[]={1,2,3,4,10,20,30};
 	int n = sizeof(arr) / sizeof(arr[0]);
        	int x = 20;
 
