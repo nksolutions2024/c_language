@@ -5,7 +5,7 @@ int arr[5]= {-99,-99,-99,-99,-99};
 
 void insertAtIndex(int n,int index);
 void display();
-void deleteAtIndex(int index);
+void deleteByIndex(int index);
 void deleteByEle(int ele);
 
 int main(){
@@ -30,12 +30,12 @@ int main(){
 				break;
 			case 4:
 				printf("Enter index for deleting");
-				scanf("%d", u_index);
+				scanf("%d", &u_index);
 				deleteByIndex(u_index);
 				break;
 			case 5:
 				printf("Enter value to be deleted");
-				scanf("%d",u_value);
+				scanf("%d",&u_value);
 				deleteByEle(u_value);
 				break;
 			case 3:
@@ -65,7 +65,7 @@ void display(){
 	}
 }
 
-void deleteAtIndex(int index){
+void deleteByIndex(int index){
 	if (arr[index] != -99)
 	{
 		printf("Deleted element was %d\n",arr[index]);
@@ -78,9 +78,9 @@ void deleteAtIndex(int index){
 
 }
 
-void deleteAtEle(int ele)
+void deleteByEle(int ele)
 {
-	for(int i=0; i<n; i++)
+	for(int i=0; i<5; i++)
 	{
 		if(arr[i] == ele)
 		{
