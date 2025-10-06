@@ -65,7 +65,7 @@ void duplicate(){
 	for(int i=0;i<5;i++)
 	{
 //		arr[i];
-		arrStruct[i].ecount=0;
+		arrStruct[i].ecount=1;
 
 		for(int j=0;i<5-i-1;i++)
 		{
@@ -79,7 +79,17 @@ void duplicate(){
 	//display array of struct
 	for(int i=0;i<5;i++)
 	{
+		arrStruct[i].ele=arr[i];
 		printf("%d\n",arrStruct[i].ecount);
+	}
+	//tell duplicates
+	printf("duplicates are :-\n");
+	for(int i=0;i<5;i++)
+	{
+		if(arrStruct[i].ecount>1)
+		{
+			printf("%d\n",arrStruct[i].ele);
+		}
 	}
 
 }

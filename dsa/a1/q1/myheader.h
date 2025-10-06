@@ -61,4 +61,21 @@ int arrMin(){
 	return minIndex;
 }
 
+void revDisplay(){
+	for(int i=4; i>=0; i--)
+	{
+		printf("%d \t", arr[i]);
+	}
+	printf("\n");
+}
+
+int search(int element){
+	for(int i=0; i<5; i++)
+	{
+		if(arr[i]==element)
+			return i;
+	}
+	return -1;
+}
+
 #endif
