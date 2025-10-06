@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 int arr[5]= {-99,-99,-99,-99,-99};
+int insert_count = 0;
 
 void insertAtIndex(int n,int index);
 void display();
@@ -12,12 +13,18 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter the 1->insert 2->display");
+		printf("Enter the 1->insert 2->display 3->exit : ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
 			case 1:
-				printf("inserting");
+/*				
+				printf("Enter index where to insert : ");
+				scanf("%d", &u_index);
+				printf("Enter value of element : ");
+				scanf("%d", &u_value);
+				insertAtIndex(u_value, u_index);
+*/
 				break;
 			case 2: 
 				display();
@@ -27,28 +34,25 @@ int main(){
 		}
 	}
 
-
-/*
-	printf("Enter index where to insert : ");
-	scanf("%d", &u_index);
-	printf("Enter value of element : ");
-	scanf("%d", &u_value);
-
 //	insertAtIndex(20,1);
-	insertAtIndex(u_value,u_index);
-//	display();
-*/
 }
 
 void insertAtIndex(int n,int index){
 
-	if(arr[index != -99])
+	if(arr[index] == -99)
 	{
 		arr[index]=n;
 	}
 	else
 	{
-		printf("already element there");
+		printf("already element there\n");
+		insert_count = insert_count + 1;
+		insertAtIndex(n, index);
+	}
+
+	if(insert_count==2){
+		printf("sorry,exiting....");
+		exit(0);
 	}
 }
 
