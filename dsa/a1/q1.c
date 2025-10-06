@@ -2,7 +2,6 @@
 #include<stdlib.h>
 
 int arr[5]= {-99,-99,-99,-99,-99};
-int insert_count = 0;
 
 void insertAtIndex(int n,int index);
 void display();
@@ -18,13 +17,11 @@ int main(){
 		switch(choice)
 		{
 			case 1:
-/*				
 				printf("Enter index where to insert : ");
 				scanf("%d", &u_index);
 				printf("Enter value of element : ");
 				scanf("%d", &u_value);
 				insertAtIndex(u_value, u_index);
-*/
 				break;
 			case 2: 
 				display();
@@ -34,7 +31,6 @@ int main(){
 		}
 	}
 
-//	insertAtIndex(20,1);
 }
 
 void insertAtIndex(int n,int index){
@@ -46,19 +42,11 @@ void insertAtIndex(int n,int index){
 	else
 	{
 		printf("already element there\n");
-		insert_count = insert_count + 1;
-		insertAtIndex(n, index);
-	}
-
-	if(insert_count==2){
-		printf("sorry,exiting....");
-		exit(0);
 	}
 }
 
 void display(){
 	int i;
-
 	for(i=0; i<5; i++)
 	{
 		printf("%d\n",arr[i]);
