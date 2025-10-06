@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 int arr[5]= {-99,-99,-99,-99,-99};
 
@@ -8,13 +9,11 @@ void display();
 int main(){
 	int u_index,u_value;
 	int choice;
-	display();
 
-	printf("\n");
-	printf("Enter the 1->insert 2->display");
-	scanf("%d",&choice);
 	while(1)
 	{
+		printf("Enter the 1->insert 2->display");
+		scanf("%d",&choice);
 		switch(choice)
 		{
 			case 1:
@@ -28,22 +27,6 @@ int main(){
 		}
 	}
 
-/*
-	while(1)
-	{
-		switch(choice)
-		{
-			case 1: display();
-			//	printf("");
-				break;
-		
-			case 1:	insertAtIndex(20,1);
-				insertAtIndex(30,4);
-				break;
-			
-		}
-	}
-*/
 
 /*
 	printf("Enter index where to insert : ");
