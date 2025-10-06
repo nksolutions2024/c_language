@@ -51,15 +51,7 @@ int main(){
 				break;
 
 			case 8:
-				revDisplay();
-				break;
-
-			case 9:
-				printf("Enter element to be searched: ");
-				scanf("%d", &u_value);
-				pos = search(u_value);
-				printf("Element at index:%d",pos);
-				//case2 not found ; pos = -1
+//				revDisplay();
 				break;
 
 			case 3:
@@ -70,12 +62,12 @@ int main(){
 }
 
 void duplicate(){
-	for(int i;i<5;i++)
+	for(int i=0;i<5;i++)
 	{
-		arr[i];
+//		arr[i];
 		arrStruct[i].ecount=0;
 
-		for(int j=0;i<n-i-1;i++)
+		for(int j=0;i<5-i-1;i++)
 		{
 			if(arr[i]==arr[j])
 			{
@@ -85,4 +77,9 @@ void duplicate(){
 				
 	}
 	//display array of struct
+	for(int i=0;i<5;i++)
+	{
+		printf("%d\n",arrStruct[i].ecount);
+	}
+
 }
