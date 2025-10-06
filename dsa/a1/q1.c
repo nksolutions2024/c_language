@@ -7,6 +7,8 @@ void insertAtIndex(int n,int index);
 void display();
 void deleteByIndex(int index);
 void deleteByEle(int ele);
+int arrMin();
+int arrMax();
 
 int main(){
 	int u_index,u_value;
@@ -14,7 +16,7 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter the 1->insert 2->display 3->exit 4->deleteByIndex 5->deleteByEle 6-> : ");
+		printf("Enter the 1->insert 2->display 3->exit 4->deleteByIndex 5->deleteByEle 6->arrMin 7->arrMax: ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -38,6 +40,8 @@ int main(){
 				scanf("%d",&u_value);
 				deleteByEle(u_value);
 				break;
+			case 6:
+				printf("%d\n", arr[arrMin()]);
 			case 3:
 				exit(0);
 		}
@@ -95,7 +99,7 @@ void deleteByEle(int ele)
 int arrMin(){
 	//assume arr[0] is Min 
 	//assuming arr[0] is not -99
-	minIndex = 0;
+	int minIndex = 0;
 	for(int i; i<5; i++)
 	{
 		if(arr[i]<arr[minIndex] && arr[i]!=-99)
