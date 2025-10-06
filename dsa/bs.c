@@ -3,7 +3,7 @@
 int binSearch(int* p, int start, int end, int x);
 
 int main(){
-	int arr[]={10,20,30};
+	int arr[]={1,2,3,4,5,6,10,20,30}; //must be ascending sorted
 	int size = sizeof(arr)/sizeof(arr[0]);
 
 	int result = binSearch(arr, 0, size-1, 20); //issue
