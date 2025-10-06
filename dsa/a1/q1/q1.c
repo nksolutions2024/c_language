@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int arr[5]= {-99,-99,-99,-99,-99};
+//int arr[5]= {-99,-99,-99,-99,-99};
+int arr[5]={10,20,30,40,50};
 #include "myheader.h" //include the header file
 
 void revDisplay();
@@ -10,8 +11,6 @@ int search(int element);
 int main(){
 	int u_index, u_value, pos ;
 	int choice;
-
-//	arr[]={10,20,30,40,50};
 
 	while(1)
 	{
