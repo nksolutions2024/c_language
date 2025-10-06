@@ -25,3 +25,5 @@ int main(){
 	int arr[]={10,20,30};
 	printf("\n%d\n", rbinSearch(arr,10,30,20) );
 }
+
+//not working ; giving garbage
