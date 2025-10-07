@@ -10,8 +10,7 @@ struct emp_data{
 
 int main(){
 	emp1.empid = 101;
-	emp1.empName[0] = 'j';
-	emp1.empName[1] = 'k';
+	strcpy(emp1.empName,"strcopy string");
 	emp1.salary = 40000;
 	emp1.yearOfJoin = 2008;
 
