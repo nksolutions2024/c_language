@@ -22,7 +22,8 @@ int main(){
 	while(1)
 	{
 		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg ");
-		printf("4->insertAtBeg 5->insertAtPos\n");
+		printf("4->insertAtBeg 5->insertAtPos 6->deleteFromEnd\n");
+		printf("7->deleteFromBeg");
 		scanf("%d",&choice);
 		
 		switch(choice)
@@ -55,6 +56,11 @@ int main(){
 				printf("node with val=[%d] got delted\n",ret);
 				break;
 
+			case 7:
+				ret = deleteFromBeg();
+				printf("node with val=[%d]got deleted\n",ret);
+				break;
+
 			case 3:
 				exit(0);
 		}
@@ -76,6 +82,19 @@ int deleteFromEnd(){
 	//task2/2
 	free(t1);
 	t2->next=NULL;
+
+	return ret;
+}
+
+int deleteFromBeg(){
+	struct node* t1;
+	t1=head;
+
+	int ret=t1->data;
+
+	//
+	head=t1->next;
+	free(t1);
 
 	return ret;
 }
