@@ -1,12 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-//int arr[5]= {-99,-99,-99,-99,-99};
-int arr[5]={10,20,30,40,50};
+int arr[5]={10,20,10,40,50};
 #include "myheader.h" //include the header file
 
-void revDisplay();
-int search(int element);
+struct clist{
+	int ele;
+	int ecount;
+}arrStruct[5];
+
+void duplicate();
 		      
 int main(){
 	int u_index, u_value, pos ;
@@ -15,10 +18,14 @@ int main(){
 	while(1)
 	{
 		printf("Enter 1->insert 2->display 3->exit 4->delByIndex ");
-	      	printf("5->deleteByEle 8->reverse_display 9->search : ");
+	      	printf("5->deleteByEle 8->reverse_display 9->search 10->duplicate : ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
+			case 10:
+				duplicate();
+				break;
+
 			case 1:
 				printf("Enter index where to insert : ");
 				scanf("%d", &u_index);
@@ -62,20 +69,20 @@ int main(){
 
 }
 
-void revDisplay(){
-	for(int i=4; i>=0; i--)
+void duplicate(){
+	for(int i;i<5;i++)
 	{
-		printf("%d \t", arr[i]);
-	}
-	printf("\n");
-}
+		arr[i];
+		arrStruct[i].ecount=0;
 
-int search(int element){
-	for(int i=0; i<5; i++)
-	{
-		if(arr[i]==element)
-			return i;
+		for(int j=0;i<n-i-1;i++)
+		{
+			if(arr[i]==arr[j])
+			{
+				arrStruct[i].ecount++;
+			}
+		}
+				
 	}
-	return -1;
+	//display array of struct
 }
-
