@@ -118,19 +118,18 @@ void insertAtPos(int ele, int pos){
 	temp->data = ele;
 	temp->next = NULL;
 
-/*
-	//wrong code below
-	//reach to last node
-	struct node* t5;
-	t5=head;
-	while(t5->next != NULL)
-	{	
-		t5=t5->next;
+	//making t6 pointing at proper node
+	struct node* t6;
+	t6=head;
+	int i=1;
+	while(++i<pos)
+	{
+		t1=t1->next;
 	}
-
-	//AA
-	temp->next = t5;
-*/
+	
+	// sequence is imp; A then B	
+	temp->next = t6->next;
+	t6->next = temp;
 }
 
 
