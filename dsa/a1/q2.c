@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 struct emp_data{
 	int empid;
@@ -9,11 +10,13 @@ struct emp_data{
 
 int main(){
 	emp1.empid = 101;
+	emp1.empName[0] = 'j';
+	emp1.empName[1] = 'k';
 	emp1.salary = 40000;
 	emp1.yearOfJoin = 2008;
 
-	printf("enter the name : ");
-	scanf("%s", emp1.empName);
+//	printf("enter the name : ");
+//	scanf("%s", emp1.empName);
 
 	printf("%d\n", emp1.empid);
 	printf("%s\n", emp1.empName);
