@@ -11,13 +11,15 @@ struct node* head = NULL; //pointer to first node
 void insertAtEnd(int ele);
 void display();
 void insertAtBeg(int ele);
+void insertAtPos(int ele, int pos);
 
 int main(){
-	int choice,ele;
+	int choice,ele,pos;
 
 	while(1)
 	{
-		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg \n");
+		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg ");
+		printf("4->insertAtBeg 5->insertAtPos\n");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -35,6 +37,12 @@ int main(){
 				printf("enter ele: ");
 				scanf("%d",&ele);
 				insertAtBeg(ele);
+				break;
+
+			case 5:
+				printf("eneter ele and pos");
+				scanf("%d %d", &ele, &pos);
+				insertAtPos(ele, pos);
 				break;
 
 			case 3:
@@ -94,6 +102,53 @@ void insertAtBeg(int ele){
 	temp->next = head;//A
 	head=temp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void insertAtPos(int ele, int pos){
+	struct node * temp;
+	temp=(struct node *)malloc(sizeof(struct node));
+	temp->data = ele;
+	temp->next = NULL;
+
+	//reach to last node
+	struct node* t5;
+	t5=head;
+	while(t5->next != NULL)
+	{	
+		t5=t5->next;
+	}
+
+	//AA
+	temp->next = t5;
+
 
 
 
