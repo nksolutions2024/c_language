@@ -13,6 +13,7 @@ void display();
 void insertAtBeg(int ele);
 void insertAtPos(int ele, int pos);
 int deleteFromEnd();
+int deleteFromBeg();
 
 int main(){
 	int ele,pos;
