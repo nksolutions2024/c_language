@@ -101,16 +101,15 @@ void insertAtBeg(int ele){
 }
 
 void insertAtPos(int ele, int pos){
-	struct node *t1;
-	t1=head;
-
 	struct node* temp;
 	void* v_ptr = malloc(sizeof(struct node));
 	temp = (struct node*)v_ptr;
-
 	temp->data = ele;
 	temp->next = NULL;
 	
+	//
+	struct node *t1;
+	t1=head;	
 	int i=1;
 	while(++i<pos)
 	{
