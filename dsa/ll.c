@@ -12,10 +12,12 @@ void insertAtEnd(int ele);
 void display();
 void insertAtBeg(int ele);
 void insertAtPos(int ele, int pos);
+int deleteFromEnd();
 
 int main(){
 	int ele,pos;
 	int choice;
+	int ret;
 
 	while(1)
 	{
@@ -48,10 +50,34 @@ int main(){
 				insertAtPos(ele, pos);
 				break;
 
+			case 6:
+				ret = deleteFromEnd();
+				printf("node with val=[%d] got delted\n",ret);
+				break;
+
 			case 3:
 				exit(0);
 		}
 	}
+}
+
+int deleteFromEnd(){
+	struct node *t1,*t2;
+	t1=head;
+	t2=NULL;
+
+	while(t1->next != NULL)
+	{
+		//task1/2
+		t2=t1;
+		t1=t1->next;
+	}
+	int ret=t1->data;
+	//task2/2
+	free(t1);
+	t2->next=NULL;
+
+	return ret;
 }
 
 void insertAtEnd(int ele){
@@ -111,6 +137,13 @@ void insertAtBeg(int ele){
 }
 
 void insertAtPos(int ele, int pos){
+	//handle special case
+	if(pos==1)
+	{
+		insertAtBeg(ele);
+		return; //important
+	}
+
 	//temp is temporary node-pointer
 	//temp have 12 bytes memory
 	struct node * temp;
@@ -124,7 +157,7 @@ void insertAtPos(int ele, int pos){
 	int i=1;
 	while(++i<pos)
 	{
-		t1=t1->next;
+		t6=t6->next;
 	}
 	
 	// sequence is imp; A then B	
