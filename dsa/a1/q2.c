@@ -8,6 +8,13 @@ struct emp_data{
 	int yearOfJoin;
 }arr_struct[10];
 
+void total_salary();
+void average_salary();
+void maxSalary();
+void minSalary();
+void findServiceDur();
+int serviceDur=0;
+
 int main(){
 	arr_struct[0].empid = 101;
 	strcpy(arr_struct[0].empName,"tom daves");
@@ -16,11 +23,8 @@ int main(){
 
 	arr_struct[1].empid = 102;
 	strcpy(arr_struct[1].empName,"jake");
-	arr_struct[1].salary = 40000;
+	arr_struct[1].salary = 36000;
 	arr_struct[1].yearOfJoin = 2020;
-
-//	printf("enter the name : ");
-//	scanf("%s", emp1.empName);
 
 	for(int i=0; i<2; i++)
 	{
@@ -29,7 +33,21 @@ int main(){
 		printf("%d\n", arr_struct[i].salary);
 		printf("%d\n", arr_struct[i].yearOfJoin);
 	}
-   	
+
+	total_salary();
+
+
 
 }
 
+void total_salary(){
+	int total_salary = 0;
+	for(int i=0; i<2; i++){
+		total_salary = total_salary + arr_struct[i].salary;
+	}
+	printf("total salary of all emp is %d\n", total_salary);
+}
+
+void findServiceDur(){
+	serviceDur = 2025 - arr_struct[0].yearOfJoin;
+}
