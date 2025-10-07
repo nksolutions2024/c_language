@@ -2,123 +2,154 @@
 #include<stdlib.h>
 
 struct node{
-	int data;
-	struct node* next;
+	int data ;
+	struct node * next;
 };
 
-struct node* head = NULL;
+struct node* head = NULL; //pointer to first node
 
-void insert(int);
+void insertAtEnd(int ele);
 void display();
 void insertAtBeg(int ele);
 void insertAtPos(int ele, int pos);
 
 int main(){
-	int ele,pos;
-	int choice;
+	int choice,ele,pos;
 
 	while(1)
 	{
+		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg ");
+		printf("4->insertAtBeg 5->insertAtPos\n");
+		scanf("%d",&choice);
+		switch(choice)
+		{
+			case 1:
+				printf("Enter ele to be insert at end: ");
+				scanf("%d",&ele);
+				insertAtEnd(ele);
+				break;
 
-	printf("enter 1->insert 2->display 3->exit 4->insertAtBeg 5->Pos \n");
-	scanf("%d", &choice);
+			case 2:
+				display();
+				break;
 
-	switch(choice){
-		case 1: printf("enter ele \n");
-			scanf("%d", &ele);
-			insert(ele);
-			break;
-		case 2: printf("linklist \n");
-			display();
-			break;
-		case 4:
-			printf("enter ele (begin) ");
-			scanf("%d",&ele);
-			insertAtBeg(ele);
-			break;
+			case 4:
+				printf("enter ele: ");
+				scanf("%d",&ele);
+				insertAtBeg(ele);
+				break;
 
-		case 5:
-			printf("enter ele and pos ");
-			scanf("%d %d",&ele,&pos);
-			insertAtPos(ele,pos);
-			break;
-		case 3: 
-			exit(0);
+			case 5:
+				printf("eneter ele and pos");
+				scanf("%d %d", &ele, &pos);
+				insertAtPos(ele, pos);
+				break;
+
+			case 3:
+				exit(0);
+		}
 	}
-	}
-
 }
 
-void insert(int ele){
-	struct node* temp;
-	void* v_ptr = malloc(sizeof(struct node));
-	temp = (struct node*)v_ptr;
-
-	temp->data = ele;
-	temp->next = NULL;
-
-	if (head == NULL){
-		head = temp;
-		return;   //leave the function from here directly
-	}
-
-	struct node* t1;
+void insertAtEnd(int ele){
+	struct node * t1;
 	t1=head;
+	struct node * temp;
+	temp=(struct node*)malloc(sizeof(struct node));
+	temp->data = ele;
+	temp->next =NULL;
 
-	//purpose of it 
-	//reaching to last element
-	while(t1->next != NULL){
-		t1=t1->next;
+	//ll does not exist (IF BLOCK)
+	if(head==NULL)
+	{
+		head=temp;
+		return; //important1
 	}
-	//finally
-	t1->next = temp;
+
+	//made mistake of ELSE BLOCK
+	//traverse to last node
+	while(t1->next != NULL)
+	{
+		t1=t1->next; //jumped
+	}
+	
+	//last node link is changed
+	t1->next = temp ;
 
 }
 
 void display(){
-	struct node* t1;
-	t1=head;
+	struct node * t2;
+	t2=head;
 
-	while(t1 != NULL) //try next
+	while(t2 != NULL)
 	{
-		printf("-->[%d]", t1->data);
-		t1=t1->next;
+		printf("-->[%d]", t2->data);
+		t2 = t2->next;
 	}
 	printf("\n");
 }
 
 void insertAtBeg(int ele){
-	struct node* temp;
-	void* v_ptr = malloc(sizeof(struct node));
-	temp = (struct node*)v_ptr;
-
+	struct node * temp;
+	temp=(struct node *)malloc(sizeof(struct node));
 	temp->data = ele;
 	temp->next = NULL;
 
-	//sequence imp
-	temp->next=head;
+	//scenario ll exits
+//	struct node * t4;
+//	t4=head;
+	temp->next = head;//A
 	head=temp;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void insertAtPos(int ele, int pos){
-	struct node *t1;
-	t1=head;
-
-	struct node* temp;
-	void* v_ptr = malloc(sizeof(struct node));
-	temp = (struct node*)v_ptr;
-
+	struct node * temp;
+	temp=(struct node *)malloc(sizeof(struct node));
 	temp->data = ele;
 	temp->next = NULL;
-	
-	int i=1;
-	while(++i<pos)
-	{
-		t1=t1->next;
+
+	//reach to last node
+	struct node* t5;
+	t5=head;
+	while(t5->next != NULL)
+	{	
+		t5=t5->next;
 	}
 
-	//A then B
-	temp->next=t1->next;
-	t1->next=temp;
-}
+	//AA
+	temp->next = t5;
 
+
+
+
+	
