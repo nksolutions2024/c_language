@@ -12,10 +12,11 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter 1->insert 2->display 3->exit ");
+		printf("Enter 4->insert 2->display 3->exit ");
 		scanf("%d",&choice);
 		switch(choice)
 		{
+/*
 			case 1:
 				printf("Enter index where to insert : ");
 				scanf("%d", &u_index);
@@ -23,7 +24,7 @@ int main(){
 				scanf("%d", &u_value);
 				insertAtIndex(u_value, u_index);
 				break;
-
+*/
 			case 4:
 				printf("Enter index where to insert : ");
 				scanf("%d", &u_index);
@@ -60,8 +61,49 @@ void i_approach2nd(int index , int value ){
 				//element[3] copied to element[4]
 				arr[i] = arr[i-1];
 			}
-
-			//finally add
-			arr[index &&&&&&&&&&&&]
+		}
+		//finally assigned
+		arr[index]=value;
 	}
 }
+/*
+ desd@desd-OptiPlex-5050:~/Documents/embc/c_language/dsa/a1/q1approaches$ ./a.out
+Enter 4->insert 2->display 3->exit 2
+-99
+-99
+-99
+-99
+-99
+Enter 4->insert 2->display 3->exit 4
+Enter index where to insert : 1
+Enter value of element : 11
+Enter 4->insert 2->display 3->exit 2
+-99
+11
+-99
+-99
+-99
+Enter 4->insert 2->display 3->exit 4
+Enter index where to insert : 2
+Enter value of element : 22
+Enter 4->insert 2->display 3->exit 4
+Enter index where to insert : 3 
+Enter value of element : 33
+Enter 4->insert 2->display 3->exit 2
+-99
+11
+22
+33
+-99
+Enter 4->insert 2->display 3->exit 4
+Enter index where to insert : 1
+Enter value of element : 84
+Enter 4->insert 2->display 3->exit 2
+-99
+84
+11
+22
+33
+Enter 4->insert 2->display 3->exit 3
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language/dsa/a1/q1approaches$ 
+ * /
