@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 struct node{
+	struct node* prev;
 	int data ;
 	struct node * next;
 };
@@ -21,9 +22,9 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter 1->insert 2->display 3->exit 4->insertAtBeg ");
-		printf("4->insertAtBeg 5->insertAtPos 6->deleteFromEnd\n");
-		printf("7->deleteFromBeg 8->deleteFromPos");
+		printf("Enter 1->insertAtEnd 2->display 3->exit  ");
+		printf(" 5->insertAtPos 6->deleteFromEnd\n");
+		printf(" ");
 		scanf("%d",&choice);
 		
 		switch(choice)
@@ -39,12 +40,6 @@ int main(){
 				display();
 				break;
 
-			case 4:
-				printf("enter ele-begin: ");
-				scanf("%d",&ele);
-				insertAtBeg(ele);
-				break;
-
 			case 5:
 				printf("enter ele and pos");
 				scanf("%d %d", &ele, &pos);
@@ -54,18 +49,6 @@ int main(){
 			case 6:
 				ret = deleteFromEnd();
 				printf("node with val=[%d] got delted\n",ret);
-				break;
-
-			case 7:
-				ret = deleteFromBeg();
-				printf("node with val=[%d]got deleted\n",ret);
-				break;
-
-			case 8:
-				printf("enter the pos");
-				scanf("%d", &pos);
-				ret = deleteFromPos(pos);
-				printf("node with val=[%d]got deleted\n",ret);
 				break;
 
 			case 3:
@@ -101,6 +84,7 @@ void insertAtEnd(int ele){
 	//temp is temporary node-pointer 
 	struct node * temp;
 	temp=(struct node*)malloc(sizeof(struct node));
+	temp->prev = NULL;
 	temp->data = ele;
 	temp->next =NULL;
 
@@ -120,9 +104,10 @@ void insertAtEnd(int ele){
 	}
 	
 	//last node's link part is changed
+	temp->prev = t1 ;//A
 	t1->next = temp ;
-
 }
+
 
 void display(){
 	struct node * t2;
