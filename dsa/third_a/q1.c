@@ -23,10 +23,10 @@ void selectionSort(){
 	min_idx = 0;
 	for(int i=0; i<6; i++)
 	{
-		for(int j=0; 6-i-1; i++)
+		for(int j=0; 6-i-1; j++)
 		{
-			min_idx = j;
-			if( arr[min_idx]<arr[j] )
+			min_idx = i;
+			if( arr[min_idx]>arr[j] )
 			{
 				min_idx=j;
 			}
@@ -34,12 +34,6 @@ void selectionSort(){
 		swap(&arr[i],&arr[min_idx]);
 	}
 }
-/*$ ./a.out
-before
-30-20-60-10-90-80-
-after
-80-20-60-10-90-30-
- */
 
 void swap(int* a, int* b){
 	int temp;
