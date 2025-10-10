@@ -13,7 +13,7 @@ void insertAtEnd(int ele);
 void display();
 void insertAtPos(int ele, int pos);
 int deleteFromEnd();
-
+int deleteFromBeg();
 
 int main(){
 	int ele,pos;
@@ -24,6 +24,7 @@ int main(){
 	{
 		printf("Enter 1->insertAtEnd 2->display 3->exit  ");
 		printf(" 5->insertAtPos 6->deleteFromEnd\n");
+		printf("7->deleteFromBeg\n");
 		printf(" ");
 		scanf("%d",&choice);
 		
@@ -51,10 +52,28 @@ int main(){
 				printf("node with val=[%d] got delted\n",ret);
 				break;
 
+			case 7:
+				ret = deleteFromBeg();
+				printf("node with val=%d got deleted\n",ret);
+				break;
+
 			case 3:
 				exit(0);
 		}
 	}
+}
+
+int deleteFromBeg(){
+	struct node *t1;
+	t1=head;
+
+	int ret = head->data;
+
+	head = head->next;
+	free(t1);
+	head->prev=NULL;
+	
+	return ret;
 }
 
 int deleteFromEnd(){

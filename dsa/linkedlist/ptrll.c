@@ -6,19 +6,18 @@ struct node{
 	struct node * next;
 };
 
-
-void insertAtEnd(struct node**, int);
+void insertAtEnd(struct node* *, int);
 void display(struct node *);
 
 int main(){
 	struct node* head= NULL;
-//	*head = NULL;
+
 	int ele;
 	int choice;
 
 	while(1)
 	{
-		printf("Enter 1->insert 2->display 3->exit");
+		printf("Enter 1->insert 2->display 3->exit\n");
 		scanf("%d",&choice);
 		
 		switch(choice)
@@ -26,7 +25,9 @@ int main(){
 			case 1:
 				printf("Enter ele-insert-end: ");
 				scanf("%d",&ele);
-				insertAtEnd(&head,ele);
+				//insertAtEnd(9999, 40);
+				//address of box that contain address of first node
+				insertAtEnd(&head,ele); //address of pointer 
 				break;
 
 			case 2: 
@@ -36,7 +37,7 @@ int main(){
 
 			case 3:
 				exit(0);
-		}
+
 	}
 }
 
@@ -72,6 +73,7 @@ void display(struct node*p){
 		printf("-->[%d]", p->data);
 		p = p->next;
 	}
+	printf("\n");
 }
 
 
