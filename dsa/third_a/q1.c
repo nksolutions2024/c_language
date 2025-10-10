@@ -21,19 +21,32 @@ int main(){
 void selectionSort(){
 	int min_idx;
 	min_idx = 0;
-	for(int i=0; i<6; i++)
+	for(int i=0; i<6-1; i++) //upto second last element
 	{
-		for(int j=0; 6-i-1; j++)
+		min_idx = i;
+		for(int j=i+1; j<6; j++)
 		{
-			min_idx = i;
 			if( arr[min_idx]>arr[j] )
 			{
 				min_idx=j;
 			}
 		}
 		swap(&arr[i],&arr[min_idx]);
+		display();
 	}
 }
+/*
+$ ./a.out
+before
+30-20-60-10-90-80-
+after
+10-20-60-30-90-80-
+10-20-60-30-90-80-
+10-20-30-60-90-80-
+10-20-30-60-90-80-
+10-20-30-60-80-90-
+10-20-30-60-80-90-
+*/
 
 void swap(int* a, int* b){
 	int temp;
