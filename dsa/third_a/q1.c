@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int arr[6]={10,20,40,50,30};
+int arr[6]={30,20,60,10,90,80};
 void display();
 void bubbleSort();
 void swap(int*,int*);
@@ -13,6 +13,7 @@ int main(){
 	display();
 	
 	printf("after\n");
+	bubbleSort();
 	swap(&var1,&var2);
 	printf("%d %d\n",var1,var2);
 	display();
