@@ -37,23 +37,24 @@ int main(){
 
 			case 3:
 				exit(0);
+		}
 
 	}
 }
 
 
-void insertAtEnd(struct node **ptr, int ele){
+void insertAtEnd(struct node** p, int ele){
 	struct node * temp;
 	temp = (struct node*)malloc(sizeof(struct node));
 	temp->data = ele;
 	temp->next = NULL;
 
 	struct node* t1;
-	t1 = *ptr;
+	t1 = *p;
 	
-	if(*ptr==NULL)
+	if(*p==NULL)
 	{
-		*ptr = temp;
+		*p = temp;
 		return;
 	}
 
@@ -66,12 +67,12 @@ void insertAtEnd(struct node **ptr, int ele){
 	t1->next = temp;
 }
 
-void display(struct node*p){
-	//p
-	while(p != NULL)
+void display(struct node*g){
+	//g
+	while(g != NULL)
 	{
-		printf("-->[%d]", p->data);
-		p = p->next;
+		printf("-->[%d]", g->data);
+		g = g->next;
 	}
 	printf("\n");
 }
