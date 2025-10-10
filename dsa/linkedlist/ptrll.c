@@ -11,7 +11,8 @@ void insertAtEnd(struct node**, int);
 void display(struct node *);
 
 int main(){
-	struct node* head;
+	struct node* head= NULL;
+//	*head = NULL;
 	int ele;
 	int choice;
 
@@ -69,6 +70,7 @@ void display(struct node*p){
 	while(p != NULL)
 	{
 		printf("-->[%d]", p->data);
+		p = p->next;
 	}
 }
 
