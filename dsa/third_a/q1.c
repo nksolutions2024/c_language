@@ -4,21 +4,42 @@ int arr[6]={30,20,60,10,90,80};
 void display();
 void bubbleSort();
 void swap(int*,int*);
+void selectionSort();
 
 int main(){
 	int var1=10,var2=20;
-	//bubble sort
 	printf("before\n");
-	printf("%d %d\n",var1,var2);
 	display();
 	
 	printf("after\n");
-	bubbleSort();
-	swap(&var1,&var2);
-	printf("%d %d\n",var1,var2);
+	//bubbleSort();
+	selectionSort();
 	display();
 
 }
+
+void selectionSort(){
+	int min_idx;
+	min_idx = 0;
+	for(int i=0; i<6; i++)
+	{
+		for(int j=0; 6-i-1; i++)
+		{
+			min_idx = j;
+			if( arr[min_idx]<arr[j] )
+			{
+				min_idx=j;
+			}
+		}
+		swap(&arr[i],&arr[min_idx]);
+	}
+}
+/*$ ./a.out
+before
+30-20-60-10-90-80-
+after
+80-20-60-10-90-30-
+ */
 
 void swap(int* a, int* b){
 	int temp;
@@ -39,6 +60,7 @@ void bubbleSort(){
 	}
 
 }
+
 void display(){
 	for(int i=0; i<6; i++)
 	{
