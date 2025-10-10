@@ -14,7 +14,7 @@ int main(){
 
 }
 
-void swap(int* a; int* b){
+void swap(int* a, int* b){
 	int temp;
 
 	temp=*a;
@@ -24,7 +24,7 @@ void swap(int* a; int* b){
 
 void bubbleSort(){
 	for(int i=0; i<6; i++){
-		for(int j=1;j<6;j++){
+		for(int j=i+1;j<6;j++){
 			if(arr[i]>arr[i+1])
 			{
 				swap(&arr[i],&arr[i+1]);
