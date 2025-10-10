@@ -54,14 +54,12 @@ void insertAtEnd(struct node **ptr, int ele){
 		*ptr = temp;
 		return;
 	}
-	else
-	{
-		while(t1->next != NULL)
-		{
-			t1=t1->next;
-		}
-	}
 
+	while(t1->next != NULL)
+	{
+		t1=t1->next;
+	}
+	
 	//finally , making connection
 	t1->next = temp;
 }
