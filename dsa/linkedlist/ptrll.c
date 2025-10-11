@@ -77,7 +77,7 @@ void display(struct node*g){
 		printf("-->[%d]", g->data);
 		g = g->next;
 	}
-	printf("/n");
+	printf("\n");
 
 	while(address_temp != NULL)
 	{

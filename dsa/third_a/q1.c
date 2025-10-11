@@ -3,7 +3,7 @@
 int arr[6]={30,20,60,10,90,80};
 void display();
 void bubbleSort();
-void swap(int*,int*);
+void swapr(int*,int*);
 void selectionSort();
 
 int main(){
@@ -32,14 +32,16 @@ void selectionSort(){
 			}
 			display();
 		}
-		swap(&arr[i],&arr[min_idx]);
+		swapr(&arr[i],&arr[min_idx]);
+		printf("arr[%d] = %d      arr[%d]= %d\n", \
+			    i ,   arr[i],    min_idx , arr[min_idx]);
 		printf("-------------\n");
 		display();
 		printf("-------------\n\n");
 	}
 }
 
-void swap(int* a, int* b){
+void swapr(int* a, int* b){
 	int temp;
 
 	temp=*a;
@@ -52,7 +54,7 @@ void bubbleSort(){
 		for(int j=0;j<6-i-1;j++){
 			if(arr[j]>arr[j+1])
 			{
-				swap(&arr[j],&arr[j+1]);
+				swapr(&arr[j],&arr[j+1]);
 			}
 		}
 	}
