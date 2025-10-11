@@ -32,6 +32,7 @@ int main(){
 
 			case 2: 
 				printf("linked_list\n");
+				printf("%p\n", head);
 				display(head);
 				break;
 
@@ -68,11 +69,20 @@ void insertAtEnd(struct node** p, int ele){
 }
 
 void display(struct node*g){
+	struct node *address_temp;
+	address_temp = g;
 	//g
 	while(g != NULL)
 	{
 		printf("-->[%d]", g->data);
 		g = g->next;
+	}
+	printf("/n");
+
+	while(address_temp != NULL)
+	{
+		printf("-->[%p]", address_temp->next);
+		address_temp = address_temp -> next;
 	}
 	printf("\n");
 }
