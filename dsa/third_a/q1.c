@@ -30,23 +30,14 @@ void selectionSort(){
 			{
 				min_idx=j;
 			}
+			display();
 		}
 		swap(&arr[i],&arr[min_idx]);
+		printf("-------------\n");
 		display();
+		printf("-------------\n\n");
 	}
 }
-/*
-$ ./a.out
-before
-30-20-60-10-90-80-
-after
-10-20-60-30-90-80-
-10-20-60-30-90-80-
-10-20-30-60-90-80-
-10-20-30-60-90-80-
-10-20-30-60-80-90-
-10-20-30-60-80-90-
-*/
 
 void swap(int* a, int* b){
 	int temp;
