@@ -12,6 +12,8 @@ int main(){
 	int arr[SIZE], arr1[5]={2,2,2,2,2};
 	int choice,ele;
 	arr_init(arr);
+	int front=-1;//not int* front
+	int rear=-1;
 
 	while(1)
 	{
@@ -20,9 +22,9 @@ int main(){
 		switch(choice)
 		{
 			case 1:
-				printf("enter ele");
+				printf("enter ele: ");
 				scanf("%d",&ele);
-//				enqueue(arr);
+				enqueue(arr,&front,&rear,ele);
 				break;
 
 			case 2:
