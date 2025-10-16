@@ -6,6 +6,7 @@
 void arr_init(int* arr);
 void display();
 void enqueue(int* arr, int*front, int*rear, int ele);
+int dequeue(int* a, int* f, int* r);
 
 
 int main(){
@@ -14,6 +15,7 @@ int main(){
 	arr_init(arr);
 	int front=-1;//not int* front
 	int rear=-1;
+	int ret;
 
 	while(1)
 	{
@@ -31,14 +33,43 @@ int main(){
 				printf("queue is \n");
 				display(arr);
 				break;
+			
+			case 4:
+				ret = dequeue(arr,&front,&rear);
+				printf("dequeue item = %d\n", ret);
+				break;
 
 			case 3:
 				exit(1);
+
 		}
 
 
 
 	}
+}
+
+int dequeue(int* a, int* f, int* r){
+	int temp;
+	if(*f==-1)
+	{
+		printf("queue is empty\n");
+		return -99;
+	}
+	
+	temp = a[*f];
+	a[*f] = -99;
+
+	if(*f == *r)
+	{
+		*f=*r=-1;
+	}
+	else
+	{
+		(*f)++;
+	}
+	return temp;
+	
 }
 
 void enqueue(int* a,int* f,int* r,int ele){
