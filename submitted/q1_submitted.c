@@ -23,7 +23,7 @@ int no_of_customer=0;
 
 int main(){
 	int choice,temp2,temp3,temp4,temp5,assigningNo;
-	char* ccname;
+	char* ccname = malloc(40);
 	//dummpy 2 entries for debugging purpose 
 	arr_struct[0].accNo=100; // assigned automatically
 	arr_struct[0].initAmt=4000;
@@ -41,7 +41,7 @@ int main(){
 		{
 			case 1:
 				printf("Enter name: \n");
-				scanf("%s",ccname);
+				scanf("%39s",ccname);
 				printf("Enter inital amount: \n");
 				scanf("%d",&temp5); //init amt
 				printf("\n");
@@ -66,7 +66,9 @@ int main(){
 				break;
 			case 6: display();
 				break;
-			case 7: exit(0);
+
+			case 7: free(ccname);
+				exit(0);
 		}
 	}
 	
