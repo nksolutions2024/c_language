@@ -60,10 +60,9 @@ void dummyEntries(){
 void display(){
 	for(int i=0; i<2; i++)
 	{
-		//it will not work as 
-		//s_ptr_temp1 is local to above function
-		// that error came.
-		printf("acc no %d\n", k[i]->accNo);
+		//k[0] is not struct-pointer
+		// so, must use dot(.) operator 
+		printf("acc no %d\n", k[i].accNo);
 
 		printf("/n");
 	}
