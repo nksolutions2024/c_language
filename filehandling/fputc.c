@@ -18,4 +18,7 @@ int main(){
 			fputc(ch, ft);
 		}
 	}
+	fclose(fs);
+	fclose(ft);
+	printf("\n copied successfully\n");
 }
