@@ -46,13 +46,14 @@ void dummyEntries(){
 	s_ptr_temp1->initAmt = 3584;
 	s_ptr_temp1->balance = s_ptr_temp1->initAmt;
 	strcpy(s_ptr_temp1->custName, "Gopal");
-	k[0] = s_ptr_temp1; //copying struct
+	//dereference required of struct-pointer
+	k[0] = *s_ptr_temp1; //copying struct
 	
 	s_ptr_temp1->accNo = 101;
 	s_ptr_temp1->initAmt = 4538;
 	s_ptr_temp1->balance = s_ptr_temp1->initAmt;
 	strcpy(s_ptr_temp1->custName, "Gopal1");
-	k[1] = s_ptr_temp2;
+	k[1] = *s_ptr_temp2;
 	
 }
 
