@@ -1,0 +1,30 @@
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language/dsa/a1$ gcc q2.c
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language/dsa/a1$ ./a.out
+enter the name : dffgdfg
+101
+2008
+dffgdfg
+desd@desd-OptiPlex-5050:~/Documents/embc/c_language/dsa/a1$ cat q2.c
+#include<stdio.h>
+
+struct emp_data{
+	int empid;
+	char empName[20];
+	int salary;
+	int yearOfJoin;
+}emp1,emp2;
+
+int main(){
+	emp1.empid = 101;
+	emp1.yearOfJoin = 2008;
+
+	printf("enter the name : ");
+	scanf("%s", emp1.empName);
+
+	printf("%d\n", emp1.empid);
+	printf("%d\n", emp1.yearOfJoin);
+	printf("%s\n", emp1.empName);
+   	
+
+}
+
