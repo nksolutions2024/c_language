@@ -8,6 +8,7 @@ struct cust_detail{
 	int balance; //first time , balance is equal to initAmt
 	char custName[40];
 };
+struct cust_detail k[100]; //maximum 100 customers
 
 void dummyEntries();
 void display();
@@ -45,11 +46,13 @@ void dummyEntries(){
 	s_ptr_temp1->initAmt = 3584;
 	s_ptr_temp1->balance = s_ptr_temp1->initAmt;
 	strcpy(s_ptr_temp1->custName, "Gopal");
+	k[0] = s_ptr_temp1; //copying struct
 	
 	s_ptr_temp1->accNo = 101;
 	s_ptr_temp1->initAmt = 4538;
 	s_ptr_temp1->balance = s_ptr_temp1->initAmt;
 	strcpy(s_ptr_temp1->custName, "Gopal1");
+	k[1] = s_ptr_temp2;
 	
 }
 
@@ -58,7 +61,8 @@ void display(){
 	{
 		//it will not work as 
 		//s_ptr_temp1 is local to above function
-		printf("acc no %d\n", s_ptr_temp1->accNo);
+		// that error came.
+		printf("acc no %d\n", k[i]->accNo);
 
 		printf("/n");
 	}
