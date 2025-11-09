@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include<string.h>
 
+int no_of_cust = 0; //initial zero customers
+
 struct cust_detail{
 	int accNo;
 	int initAmt;
@@ -13,10 +15,14 @@ struct cust_detail k[100]; //maximum 100 customers
 void dummyEntries();
 void display();
 void depositMoney(int, int);
+void withdMoney();
+void open_account(int, int, char *);
 
 int main(){
 	int choice;
-	int temp1,temp2,temp3,temp4;
+	int temp1,temp2,temp3,temp4, temp5,temp6,temp7,temp8;
+	int assigned_no;
+	char *name;
 	printf("outside while\n");
 
 	dummyEntries();
@@ -24,12 +30,19 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter 2->deposit 6->displayall 9->exit\n");
+		printf("Enter 2->deposit 3->withdraw 6->displayall 9->exit\n");
 		scanf("%d",&choice);
 		switch(choice)
 		{
 			case 1:
-				printf("hhello, you typed one\n");
+				printf("Enter name :\n");
+				scanf("%s", name);
+				printf("Enter initial amount :\n");
+				scanf("%d",&temp5);
+				//mapping
+				assigned_no = 100+no_of_cust++;
+				//call func
+				open_account(assigned_no, temp5, name); //trying
 				break;
 
 			case 6:
@@ -45,11 +58,30 @@ int main(){
 				depositMoney(temp1, temp2);
 				break;
 
+			case 3:
+				printf("Enter acc no. \n");
+				scanf("%d",&temp3);
+				printf("Enter amount for withdrawal: \n");
+				scanf("%d",&temp4);
+				//parameters are accNo, w_amount
+				withdMoney(temp3, temp4);
+				break;
+
 			case 9:
 				exit(0);
 		}
 	}
 
+}
+
+void open_account(int special_no, int init_amt, char *temp_name){
+	int otemp1, otemp2;
+	k[special_no].accNo = 100+special_no;
+	k[special_no].initAmt = init_amt;
+	//account opening time,
+	//Balance = initial amount
+	k[special_no].balance = init_amt;
+	strcpy(k[special_no].custName, temp_name);	
 }
 
 void withdMoney(int a, int w_amount){
