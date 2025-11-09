@@ -16,6 +16,7 @@ void depositMoney(int, int);
 
 int main(){
 	int choice;
+	int temp1,temp2,temp3,temp4;
 	printf("outside while\n");
 
 	dummyEntries();
@@ -37,7 +38,11 @@ int main(){
 
 			case 2:
 				//parameters are accNo , amount
-				depositMoney(100, 438);
+				printf("Enter acc no: \n");
+				scanf("%d", &temp1);
+				printf("Enter amount to be deposited: \n");
+				scanf("%d", &temp2);
+				depositMoney(temp1, temp2);
 				break;
 
 			case 9:
@@ -47,8 +52,20 @@ int main(){
 
 }
 
+void withdMoney(int a, int w_amount){
+	int mappedNo, WDAmount, wtemp1;
+	WDAmount = w_amount;
+	mappedNo = a-100;
+
+	//only if wtemp1 >= 0
+	wtemp1 = (k[mappedNo].balance - WDAmount);
+	
+	k[mappedNo].balance = wtemp1;
+	printf("withdraw sucessful\n");	
+}
+
 void depositMoney(int a, int d_amount){
-	int temp1,temp2,mappedNo, depAmount;
+	int mappedNo, depAmount;
 	depAmount = d_amount;
 	mappedNo = a-100;
 
