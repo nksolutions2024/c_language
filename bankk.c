@@ -64,6 +64,6 @@ void display(){
 		// so, must use dot(.) operator 
 		printf("acc no %d\n", k[i].accNo);
 
-		printf("/n");
+		printf("\n");
 	}
 }
