@@ -22,7 +22,7 @@ int main(){
 	int choice;
 	int temp1,temp2,temp3,temp4, temp5,temp6,temp7,temp8;
 	int assigned_no;
-	char *name;
+	char *name = malloc(40);
 	printf("outside while\n");
 
 	dummyEntries();
@@ -42,7 +42,7 @@ int main(){
 				scanf("%d",&temp5);
 				//mapping
 				assigned_no = 100+no_of_cust++;
-				printf("%s\n", name);
+				printf("%39s\n", name);
 				getchar();
 				// DEBUG using getchar() ,try it
 				//call func
@@ -72,6 +72,7 @@ int main(){
 				break;
 
 			case 9:
+				free(name);
 				exit(0);
 		}
 	}
