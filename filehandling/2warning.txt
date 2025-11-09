@@ -1,0 +1,19 @@
+kite@kite-HP-ProBook-430-G5:~/hup/c_language/filehandling$ vim prog4.c
+kite@kite-HP-ProBook-430-G5:~/hup/c_language/filehandling$ gcc prog4.c 
+prog4.c: In function ‘main’:
+prog4.c:16:23: warning: implicit declaration of function ‘gets’; did you mean ‘fgets’? [-Wimplicit-function-declaration]
+   16 |         while( strlen(gets(str))>0 )
+      |                       ^~~~
+      |                       fgets
+prog4.c:16:23: warning: passing argument 1 of ‘strlen’ makes pointer from integer without a cast [-Wint-conversion]
+   16 |         while( strlen(gets(str))>0 )
+      |                       ^~~~~~~~~
+      |                       |
+      |                       int
+In file included from prog4.c:3:
+/usr/include/string.h:407:35: note: expected ‘const char *’ but argument is of type ‘int’
+  407 | extern size_t strlen (const char *__s)
+      |                       ~~~~~~~~~~~~^~~
+/usr/bin/ld: /tmp/cc7WsVPV.o: in function `main':
+prog4.c:(.text+0x9a): warning: the `gets' function is dangerous and should not be used.
+kite@kite-HP-ProBook-430-G5:~/hup/c_language/filehandling$
