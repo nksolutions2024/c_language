@@ -49,10 +49,10 @@ void dummyEntries(){
 	//dereference required of struct-pointer
 	k[0] = *s_ptr_temp1; //copying struct
 	
-	s_ptr_temp1->accNo = 101;
-	s_ptr_temp1->initAmt = 4538;
-	s_ptr_temp1->balance = s_ptr_temp1->initAmt;
-	strcpy(s_ptr_temp1->custName, "Gopal1");
+	s_ptr_temp2->accNo = 101;
+	s_ptr_temp2->initAmt = 4538;
+	s_ptr_temp2->balance = s_ptr_temp1->initAmt;
+	strcpy(s_ptr_temp2->custName, "Gopal1");
 	k[1] = *s_ptr_temp2;
 	
 }
@@ -62,7 +62,10 @@ void display(){
 	{
 		//k[0] is not struct-pointer
 		// so, must use dot(.) operator 
-		printf("acc no %d\n", k[i].accNo);
+		printf("acc no %d,when i=[%d]\n", k[i].accNo, i);
+		printf("initAmt %d\n", k[i].initAmt);
+		printf("balance %d\n", k[i].balance);
+		printf("customer name: %s\n", k[i].custName);
 
 		printf("\n");
 	}
