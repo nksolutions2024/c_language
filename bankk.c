@@ -87,7 +87,7 @@ void open_account(int special_no, int init_amt, char *temp_name){
 	//Balance = initial amount
 	k[special_no].balance = init_amt;
 	// DEBUG 1
-	//strcpy(k[special_no].custName, *temp_name);	
+	strcpy(k[special_no].custName, temp_name);	
 }
 
 void withdMoney(int a, int w_amount){
