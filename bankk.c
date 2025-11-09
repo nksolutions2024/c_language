@@ -30,7 +30,7 @@ int main(){
 
 	while(1)
 	{
-		printf("Enter 2->deposit 3->withdraw 6->displayall 9->exit\n");
+		printf("Enter 1->open-account 2->deposit 3->withdraw 6->displayall 9->exit\n");
 		scanf("%d",&choice);
 		switch(choice)
 		{
@@ -38,9 +38,13 @@ int main(){
 				printf("Enter name :\n");
 				scanf("%s", name);
 				printf("Enter initial amount :\n");
+				getchar();
 				scanf("%d",&temp5);
 				//mapping
 				assigned_no = 100+no_of_cust++;
+				printf("%s\n", name);
+				getchar();
+				// DEBUG using getchar() ,try it
 				//call func
 				open_account(assigned_no, temp5, name); //trying
 				break;
@@ -81,7 +85,8 @@ void open_account(int special_no, int init_amt, char *temp_name){
 	//account opening time,
 	//Balance = initial amount
 	k[special_no].balance = init_amt;
-	strcpy(k[special_no].custName, temp_name);	
+	// DEBUG 1
+	//strcpy(k[special_no].custName, *temp_name);	
 }
 
 void withdMoney(int a, int w_amount){
