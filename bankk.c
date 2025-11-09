@@ -36,7 +36,8 @@ int main(){
 				break;
 
 			case 2:
-				depositMoney(123, 100);
+				//parameters are accNo , amount
+				depositMoney(100, 438);
 				break;
 
 			case 9:
