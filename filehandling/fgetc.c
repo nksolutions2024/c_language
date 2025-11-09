@@ -30,7 +30,7 @@ int main(){
 		if(ch=='\t')
 			not++;
 	}
-	printf("\n---------------\n");
+	printf("\n-----	---- ---- --\n");
 	printf("%d %d %d %d",noc, nob, nol, not);
 	
 	fclose(fp); //close file pointer
