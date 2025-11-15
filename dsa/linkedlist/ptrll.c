@@ -6,7 +6,7 @@ struct node{
 	struct node * next;
 };
 
-void insertAtEnd(struct node* *, int);
+void insert_at_end(struct node* *, int);
 void display(struct node *);
 
 int main(){
@@ -25,9 +25,7 @@ int main(){
 			case 1:
 				printf("Enter ele-insert-end: ");
 				scanf("%d",&ele);
-				//insertAtEnd(9999, 40);
-				//address of box that contain address of first node
-				insertAtEnd(&head,ele); //address of pointer 
+				insert_at_end(&head,ele);
 				break;
 
 			case 2: 
@@ -44,7 +42,7 @@ int main(){
 }
 
 
-void insertAtEnd(struct node** p, int ele){
+void insert_at_end(struct node** p, int ele){
 	struct node * temp;
 	temp = (struct node*)malloc(sizeof(struct node));
 	temp->data = ele;
