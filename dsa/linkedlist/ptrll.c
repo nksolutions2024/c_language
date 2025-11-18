@@ -6,8 +6,9 @@ struct node{
 	struct node * next;
 };
 
-void insert_at_end(struct node* *, int);
+void insert_at_end(struct node **, int);
 void display(struct node *);
+void delete_at_end(struct node **);
 
 int main(){
 	struct node * head;
@@ -34,6 +35,10 @@ int main(){
 				display(head);
 				break;
 
+			case 4:
+				delete_at_end(&head);
+				break;
+
 			case 3:
 				exit(0);
 		}
@@ -41,6 +46,22 @@ int main(){
 	}
 }
 
+void delete_at_end(struct node ** p){
+	struct node * t2, *t4;
+	t2 = *p; 
+	
+	while(t2->next != NULL)
+	{
+		t4=t2;
+		t2=t2->next;
+	}
+
+	//free last node
+	free(t2);
+	//last-but-one(modify next)
+	t4->next = NULL;
+	printf("deleted last-node sucessfully\n");
+}
 
 void insert_at_end(struct node** p, int ele){
 	struct node * temp;
