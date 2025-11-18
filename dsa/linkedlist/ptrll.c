@@ -10,11 +10,11 @@ void insert_at_end(struct node* *, int);
 void display(struct node *);
 
 int main(){
-	struct node* head= NULL;
+	struct node * head;
+	head = NULL;
 
 	int ele;
 	int choice;
-
 	while(1)
 	{
 		printf("Enter 1->insert 2->display 3->exit\n");
