@@ -19,6 +19,7 @@ int main(){
 	while(1)
 	{
 		printf("Enter 1->insert 2->display 3->exit\n");
+		printf("4->delete_at_end\n");
 		scanf("%d",&choice);
 		
 		switch(choice)
@@ -49,7 +50,8 @@ int main(){
 void delete_at_end(struct node ** p){
 	struct node * t2, *t4;
 	t2 = *p; 
-	
+	//one node case, remaining
+
 	while(t2->next != NULL)
 	{
 		t4=t2;
