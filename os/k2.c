@@ -1,16 +1,21 @@
 #include<pthread.h>
 #include<stdio.h>
 
-void * thread_func(void* arg){
+void * worker_thread(void* arg){
 	printf("Thread is running!\n");
 	return NULL;
 }
 
 int main(){
-	pthread_t t;
+	pthread_t worker;
+	int status;
 
-	pthread_create(&t, NULL, thread_func, NULL);
-	pthread_join(t, NULL);
+	status = pthread_create(&worker, NULL, worker_thread, NULL);
+	//pthread_create(&t, NULL, thread_func, NULL);
+	
+	status = pthread_join(worker, NULL);
+
+	printf("Main thread: Worker has finished. \n");
 
 	return 0;
 }
