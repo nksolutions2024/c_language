@@ -4,26 +4,26 @@
 
 #define NUM_THREADS 5
 
-void *PrintHello(void *threadid){
-	long tid;
-	tid = (long)threadid;
-	printf("hhelllo world! it's me , thread #%ld\n", tid);
+void* print_thread_message(void *arg){
+	long thread_index;
+	thread_index = (long)arg;
+	printf("hhelllo world! it's me , thread #%ld\n", thread_index);
 	pthread_exit(NULL);
 }
 
 int main(){
-	pthread_t threads[NUM_THREADS];
+	pthread_t thread_handles[NUM_THREADS];
 
-	int rc;
-	long t;
+	int create_status;
+	long i;
 
-	for(t=0; t<NUM_THREADS; t++){
-		printf("In main: creating thread %ld\n", t);
-		rc = pthread_create(&threads[t], NULL, PrintHello, (void*)t);
+	for(i=0; i<NUM_THREADS; i++){
+		printf("In main: creating thread %ld\n", i);
+		create_status = pthread_create(&thread_handles[i], NULL, print_thread_message, (void*)i);
 
-		if(rc)
+		if(create_status != 0)
 		{
-			printf("ERROR: return code from pthread_create() is %d\n", rc);
+			printf("ERROR: return code from pthread_create() is %d\n", create_status);
 			exit(-1);
 		}
 	}
