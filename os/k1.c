@@ -5,19 +5,20 @@
 #define NUM_THREADS 5
 
 void *PrintHello(void *threadid){
-	int tid;
-	tid = (int)threadid;
-	printf("hhelllo world! it's me , thread #%d\n", tid);
+	long tid;
+	tid = (long)threadid;
+	printf("hhelllo world! it's me , thread #%ld\n", tid);
 	pthread_exit(NULL);
 }
 
 int main(){
 	pthread_t threads[NUM_THREADS];
 
-	int rc, t;
+	int rc;
+	long t;
 
 	for(t=0; t<NUM_THREADS; t++){
-		printf("In main: creating thread %d\n", t);
+		printf("In main: creating thread %ld\n", t);
 		rc = pthread_create(&threads[t], NULL, PrintHello, (void*)t);
 
 		if(rc)
