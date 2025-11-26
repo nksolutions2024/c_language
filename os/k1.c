@@ -13,13 +13,17 @@ void* print_thread_message(void *arg){
 
 int main(){
 	pthread_t thread_handles[NUM_THREADS];
-
 	int create_status;
 	long i;
 
 	for(i=0; i<NUM_THREADS; i++){
 		printf("In main: creating thread %ld\n", i);
-		create_status = pthread_create(&thread_handles[i], NULL, print_thread_message, (void*)i);
+		create_status = pthread_create(
+				&thread_handles[i], 
+				NULL, 
+				print_thread_message, 
+				(void*)i
+				);
 
 		if(create_status != 0)
 		{
