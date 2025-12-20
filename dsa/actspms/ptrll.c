@@ -1,13 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void insertAtEnd(int **, int);
-void display();
+
 
 struct node{
 	int data;
 	struct node * next;
 };
+void insertAtEnd(struct node **, int);
+void display(struct node *);
 
 int main(){
 	struct node * head;
@@ -21,11 +22,11 @@ int main(){
 		case 1:
 			printf("Enter the element to be inserted:\n");
 			scanf("%d", &ele);
-			insertAtEnd( ,ele);
+			insertAtEnd(&head ,ele);
 			break;
 
 		case 2:
-			display();
+			display(head);
 			break;
 
 		case 3: 
@@ -34,9 +35,37 @@ int main(){
 
 }
 
-void insertAtEnd(struct node , int ele ){
-	struct node * temp = (struct node *)malloc(sizeof(struct node));
+void insertAtEnd(struct node ** p, int ele ){
+	struct node * temp ;
+	temp = (struct node *)malloc(sizeof(struct node));
+	temp->data = ele;
+	temp->next = NULL;
 
-	if()
+	struct node *t1;
+	t1 = *p;
+
+	if(*p ==NULL)
+	{
+		*p = temp;
+		return;
+	}
+
+	while(t1->next != NULL){
+		t1=t1->next;
+	}
+
+	t1->next =temp;
 
 }
+
+void display(struct node * g){
+	struct node * addresstemp;
+	addresstemp = g;
+	while(g != NULL){
+		printf("%d ", g->data);
+		g=g->next;
+	}
+	printf("\n");
+}
+
+

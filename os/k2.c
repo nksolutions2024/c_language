@@ -11,10 +11,8 @@ int main(){
 	int status;
 
 	status = pthread_create(&worker, NULL, worker_thread, NULL);
-	//pthread_create(&t, NULL, thread_func, NULL);
 	
 	status = pthread_join(worker, NULL);
-
 	printf("Main thread: Worker has finished. \n");
 
 	return 0;
