@@ -219,7 +219,7 @@ int main()
 
 
 
-SHARED MEMORY FOR READER PROCESS
+//SHARED MEMORY FOR READER PROCESS
 
 
 #include <iostream>
