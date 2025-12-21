@@ -1,0 +1,1942 @@
+﻿//socket server
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+#include "sock.h"
+
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1); /* failure */
+}
+
+int main() {
+  int fd = socket(AF_INET,     /* network versus AF_LOCAL */
+                  SOCK_STREAM, /* reliable, bidirectional, arbitrary payload size */
+                  0);          /* system picks underlying protocol (TCP) */
+  if (fd < 0) report("socket", 1); /* terminate */
+
+  /* bind the server's local address in memory */
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr));          /* clear the bytes */
+  saddr.sin_family = AF_INET;                /* versus AF_LOCAL */
+  saddr.sin_addr.s_addr = htonl(INADDR_ANY); /* host-to-network endian */
+  saddr.sin_port = htons(PortNumber);        /* for listening */
+
+  if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
+    report("bind", 1); /* terminate */
+
+  /* listen to the socket */
+  if (listen(fd, MaxConnects) < 0) /* listen for clients, up to MaxConnects */
+    report("listen", 1); /* terminate */
+
+  fprintf(stderr, "Listening on port %i for clients...\n", PortNumber);
+  /* a server traditionally listens indefinitely */
+  while (1) {
+    struct sockaddr_in caddr; /* client address */
+    int len = sizeof(caddr);  /* address length could change */
+
+    int client_fd = accept(fd, (struct sockaddr*) &caddr, &len);  /* accept blocks */
+    if (client_fd < 0) {
+      report("accept", 0); /* don't terminate, though there's a problem */
+      continue;
+    }
+
+    /* read from client */
+    int i;
+    for (i = 0; i < ConversationLen; i++) {
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer));
+      int count = read(client_fd, buffer, sizeof(buffer));
+      if (count > 0) {
+        puts(buffer);
+        write(client_fd, buffer, sizeof(buffer)); /* echo as confirmation */
+      }
+    }
+    close(client_fd); /* break connection */
+  }  /* while(1) */
+  return 0;
+}
+
+
+
+
+
+
+//socket client
+
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netdb.h>
+#include "sock.h"
+
+const char* books[] = {"War and Peace",
+                       "Pride and Prejudice",
+                       "The Sound and the Fury"};
+
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1); /* failure */
+}
+
+int main() {
+  /* fd for the socket */
+  int sockfd = socket(AF_INET,      /* versus AF_LOCAL */
+                      SOCK_STREAM,  /* reliable, bidirectional */
+                      0);           /* system picks protocol (TCP) */
+  if (sockfd < 0) report("socket", 1); /* terminate */
+
+  /* get the address of the host */
+  struct hostent* hptr = gethostbyname(Host); /* localhost: 127.0.0.1 */
+  if (!hptr) report("gethostbyname", 1); /* is hptr NULL? */
+  if (hptr->h_addrtype != AF_INET)       /* versus AF_LOCAL */
+    report("bad address family", 1);
+
+  /* connect to the server: configure server's address 1st */
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr));
+  saddr.sin_family = AF_INET;
+  saddr.sin_addr.s_addr =
+     ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
+  saddr.sin_port = htons(PortNumber); /* port number in big-endian */
+
+  if (connect(sockfd, (struct sockaddr*) &saddr, sizeof(saddr)) < 0)
+    report("connect", 1);
+
+  /* Write some stuff and read the echoes. */
+  puts("Connect to server, about to write some stuff...");
+  int i;
+  for (i = 0; i < ConversationLen; i++) {
+    if (write(sockfd, books[i], strlen(books[i])) > 0) {
+      /* get confirmation echoed from server and print */
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer));
+      if (read(sockfd, buffer, sizeof(buffer)) > 0)
+        puts(buffer);
+    }
+  }
+  puts("Client done, about to exit...");
+  close(sockfd); /* close the connection */
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SHARED MEMORY FOR WRITER PROCESS
+
+
+#include <iostream>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+using namespace std;
+  
+int main()
+{
+    // ftok to generate unique key
+    key_t key = ftok("shmfile",65);
+  
+    // shmget returns an identifier in shmid
+    int shmid = shmget(key,1024,0666|IPC_CREAT);
+  
+    // shmat to attach to shared memory
+    char *str = (char*) shmat(shmid,(void*)0,0);
+  
+    cout<<"Write Data : ";
+    gets(str);
+  
+    printf("Data written in memory: %s\n",str);
+      
+    //detach from shared memory 
+    shmdt(str);
+  
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SHARED MEMORY FOR READER PROCESS
+
+
+#include <iostream>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+using namespace std;
+  
+int main()
+{
+    // ftok to generate unique key
+    key_t key = ftok("shmfile",65);
+  
+    // shmget returns an identifier in shmid
+    int shmid = shmget(key,1024,0666|IPC_CREAT);
+  
+    // shmat to attach to shared memory
+    char *str = (char*) shmat(shmid,(void*)0,0);
+  
+    printf("Data read from memory: %s\n",str);
+      
+    //detach from shared memory 
+    shmdt(str);
+    
+    // destroy the shared memory
+    shmctl(shmid,IPC_RMID,NULL);
+     
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Shared Memory using mmap() system call
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+
+
+void* create_shared_memory(size_t size) {
+  // Our memory buffer will be readable and writable:
+  int protection = PROT_READ | PROT_WRITE;
+
+
+  // The buffer will be shared (meaning other processes can access it), but anonymous (meaning third-party processes cannot obtain an address for it), so only this process and its children will be able to use it:
+
+
+  int visibility = MAP_SHARED | MAP_ANONYMOUS;
+
+
+  // The remaining parameters to `mmap()` are not important for this use case,
+  // but the manpage for `mmap` explains their purpose.
+
+
+  return mmap(NULL, size, protection, visibility, -1, 0);
+}
+
+
+
+
+
+
+#include <string.h>
+#include <unistd.h>
+
+
+int main() {
+  char parent_message[] = "hello";  // parent process will write this message
+  char child_message[] = "goodbye"; // child process will then write this one
+
+
+  void* shmem = create_shared_memory(128);
+
+
+  memcpy(shmem, parent_message, sizeof(parent_message));
+
+
+  int pid = fork();
+
+
+  if (pid == 0) {
+    printf("Child read: %s\n", shmem);
+    memcpy(shmem, child_message, sizeof(child_message));
+    printf("Child wrote: %s\n", shmem);
+
+
+  } else {
+    printf("Parent read: %s\n", shmem);
+    sleep(1);
+    printf("After 1s, parent read: %s\n", shmem);
+  }
+}
+
+
+ftok(): converts a pathname and a project identifier to a unique System V IPC key 
+shmget(): upon successful completion, shmget() returns an identifier for the shared memory segment.
+shmat(): Before you can use a shared memory segment, you have to attach yourself to it using shmat(). 
+void *shmat(int shmid ,void *shmaddr ,int shmflg);
+shmid is shared memory id. shmaddr specifies specific address to use but we should set it to zero and OS will automatically choose the address.
+shmdt(): When you’re done with the shared memory segment, your program should detach itself from it using shmdt(). 
+shmctl(): when you detach from shared memory,it is not destroyed. To destroy it, shmctl() is used. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#define BUFFER SIZE 25
+#define READ END 0
+#define WRITE END 1
+int main(void)
+{
+char write msg[BUFFER SIZE] = "Greetings";
+char read msg[BUFFER SIZE];
+int fd[2];
+pid t pid;
+
+
+/* create the pipe */
+if (pipe(fd) == -1) {
+fprintf(stderr,"Pipe failed");
+return 1;
+}
+/* fork a child process */
+pid = fork();
+if (pid < 0) { /* error occurred */
+fprintf(stderr, "Fork Failed");
+return 1;
+}
+if (pid > 0) { /* parent process */
+/* close the unused end of the pipe */
+close(fd[READ END]);
+/* write to the pipe */
+write(fd[WRITE END], write msg, strlen(write msg)+1);
+/* close the write end of the pipe */
+close(fd[WRITE END]);
+}
+else { /* child process */
+/* close the unused end of the pipe */
+close(fd[WRITE END]);
+/* read from the pipe */
+read(fd[READ END], read msg, BUFFER SIZE);
+printf("read %s",read msg);
+/* close the read end of the pipe */
+close(fd[READ END]);
+}
+return 0;
+}
+Below is a clear, step-by-step explanation of both the socket server and socket client code. This is classic TCP client–server communication in C.
+________________
+
+
+📡 Overall Idea (Big Picture)
+* The server
+   * Creates a TCP socket
+   * Binds it to a port
+   * Listens for clients
+   * Accepts a client connection
+   * Reads messages and echoes them back
+* The client
+   * Creates a TCP socket
+   * Connects to the server
+   * Sends strings
+   * Receives echoed responses
+The two programs communicate over TCP/IP.
+sock.h (not shown) likely defines:
+#define PortNumber 12345
+#define MaxConnects 5
+#define BuffSize 256
+#define ConversationLen 3
+#define Host "localhost"
+
+
+________________
+
+
+🖥️ SOCKET SERVER EXPLANATION
+________________
+
+
+1️⃣ Header Files
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+
+
+These provide:
+* Socket APIs (socket, bind, listen, accept)
+* TCP/IP structures
+* Byte-order conversion functions
+________________
+
+
+2️⃣ Error Handling Function
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1);
+}
+
+
+* Prints the system error message
+* Optionally terminates the program
+________________
+
+
+3️⃣ Create the Socket
+int fd = socket(AF_INET, SOCK_STREAM, 0);
+
+
+* AF_INET → IPv4
+* SOCK_STREAM → TCP
+* 0 → OS chooses TCP protocol
+📌 fd is the server socket file descriptor
+________________
+
+
+4️⃣ Bind Socket to an Address
+struct sockaddr_in saddr;
+saddr.sin_family = AF_INET;
+saddr.sin_addr.s_addr = htonl(INADDR_ANY);
+saddr.sin_port = htons(PortNumber);
+
+
+* INADDR_ANY → accept connections on any network interface
+* htonl / htons → convert to network byte order
+bind(fd, (struct sockaddr *) &saddr, sizeof(saddr));
+
+
+📌 This attaches the socket to a specific port
+________________
+
+
+5️⃣ Listen for Clients
+listen(fd, MaxConnects);
+
+
+* Puts socket into passive mode
+* Allows up to MaxConnects pending clients
+________________
+
+
+6️⃣ Accept Client Connections (Blocking)
+int client_fd = accept(fd, (struct sockaddr*) &caddr, &len);
+
+
+* Blocks until a client connects
+* Returns a new socket for that client
+📌 fd → listening socket
+📌 client_fd → communication socket
+________________
+
+
+7️⃣ Read & Echo Data
+read(client_fd, buffer, sizeof(buffer));
+write(client_fd, buffer, sizeof(buffer));
+
+
+* Server:
+   * Reads client message
+   * Prints it
+   * Sends it back (echo)
+This loop runs ConversationLen times.
+⚠️ Bug/inefficiency:
+write(client_fd, buffer, sizeof(buffer));
+
+
+Should be:
+write(client_fd, buffer, count);
+
+
+Otherwise it sends unused garbage bytes.
+________________
+
+
+8️⃣ Close Client Connection
+close(client_fd);
+
+
+Server stays alive and waits for new clients.
+________________
+
+
+💻 SOCKET CLIENT EXPLANATION
+________________
+
+
+1️⃣ Book Messages
+const char* books[] = {
+  "War and Peace",
+  "Pride and Prejudice",
+  "The Sound and the Fury"
+};
+
+
+Client sends these strings to the server.
+________________
+
+
+2️⃣ Create Socket
+int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+
+Same as server, but used for connecting
+________________
+
+
+3️⃣ Resolve Hostname
+struct hostent* hptr = gethostbyname(Host);
+
+
+* Converts "localhost" → 127.0.0.1
+* Gets server IP address
+________________
+
+
+4️⃣ Configure Server Address
+saddr.sin_family = AF_INET;
+saddr.sin_addr.s_addr =
+  ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
+saddr.sin_port = htons(PortNumber);
+
+
+________________
+
+
+5️⃣ Connect to Server
+connect(sockfd, (struct sockaddr*) &saddr, sizeof(saddr));
+
+
+📌 Establishes a TCP connection
+________________
+
+
+6️⃣ Send Data & Read Echo
+write(sockfd, books[i], strlen(books[i]));
+read(sockfd, buffer, sizeof(buffer));
+puts(buffer);
+
+
+Client:
+* Sends a book title
+* Reads the echoed response
+* Prints it
+________________
+
+
+7️⃣ Close Connection
+close(sockfd);
+
+
+Client exits cleanly.
+________________
+
+
+🔁 Communication Flow (Summary)
+Client                  Server
+------                  ------
+socket()                socket()
+connect()   ─────────▶  bind()
+                         listen()
+write("War...") ─────▶ accept()
+                        read()
+read("War...") ◀────── write()
+(close)
+
+
+________________
+
+
+⚠️ Important Notes / Improvements
+1. Partial reads/writes not handled
+   * TCP does not guarantee full message delivery in one call
+2. Buffer over-sending bug
+write(client_fd, buffer, count); // correct
+2. Single-threaded server
+   * Only handles one client at a time
+3. No message framing
+   * Server assumes fixed number of messages
+________________
+
+
+✅ What This Code Is Good For
+✔ Learning TCP sockets
+✔ Understanding client–server basics
+✔ Demonstrating blocking I/O
+✔ Echo server example
+________________
+
+
+If you want, I can:
+* Fix the bugs
+* Convert this to multi-client (fork / threads)
+* Add proper message framing
+* Rewrite using select() / poll()
+* Explain sock.h
+Just tell me 👍
+// Socket server
+
+
+#include <string.h>     // memset, strlen
+#include <stdio.h>      // printf, perror, puts
+#include <stdlib.h>     // exit
+#include <unistd.h>     // read, write, close
+#include <sys/types.h>  // data types
+#include <sys/socket.h> // socket APIs
+#include <netinet/tcp.h>// TCP definitions
+#include <arpa/inet.h>  // htons, htonl, inet
+#include "sock.h"       // PortNumber, BuffSize, etc.
+
+
+// Error-reporting helper function
+void report(const char* msg, int terminate) {
+  perror(msg);          // print system error message
+  if (terminate) exit(-1); // exit if fatal error
+}
+
+
+int main() {
+
+
+  // Create a TCP socket
+  int fd = socket(
+      AF_INET,          // IPv4
+      SOCK_STREAM,      // TCP (reliable stream)
+      0                 // OS chooses protocol (TCP)
+  );
+
+
+  // If socket creation fails, terminate
+  if (fd < 0) report("socket", 1);
+
+
+  // Server address structure
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr)); // clear structure
+
+
+  saddr.sin_family = AF_INET;                // IPv4
+  saddr.sin_addr.s_addr = htonl(INADDR_ANY); // accept any local IP
+  saddr.sin_port = htons(PortNumber);        // listening port
+
+
+  // Bind socket to IP + port
+  if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
+    report("bind", 1);
+
+
+  // Put socket into listening mode
+  if (listen(fd, MaxConnects) < 0)
+    report("listen", 1);
+
+
+  fprintf(stderr, "Listening on port %i for clients...\n", PortNumber);
+
+
+  // Server runs forever
+  while (1) {
+
+
+    struct sockaddr_in caddr; // client address
+    int len = sizeof(caddr);  // size of client address
+
+
+    // Accept a client connection (blocks until client connects)
+    int client_fd = accept(fd, (struct sockaddr*) &caddr, &len);
+
+
+    // If accept fails, continue running server
+    if (client_fd < 0) {
+      report("accept", 0);
+      continue;
+    }
+
+
+    // Communicate with client
+    int i;
+    for (i = 0; i < ConversationLen; i++) {
+
+
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer)); // clear buffer
+
+
+      // Read data from client
+      int count = read(client_fd, buffer, sizeof(buffer));
+
+
+      if (count > 0) {
+        puts(buffer); // print received message
+
+
+        // Echo message back to client
+        // NOTE: better to use "count" instead of sizeof(buffer)
+        write(client_fd, buffer, sizeof(buffer));
+      }
+    }
+
+
+    // Close connection with client
+    close(client_fd);
+  }
+
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Socket client
+
+
+#include <string.h>     // strlen, memset
+#include <stdio.h>      // puts, perror
+#include <stdlib.h>     // exit
+#include <unistd.h>     // read, write, close
+#include <sys/types.h>  // data types
+#include <sys/socket.h> // socket APIs
+#include <arpa/inet.h>  // inet, htons
+#include <netinet/in.h> // sockaddr_in
+#include <netinet/tcp.h>// TCP definitions
+#include <netdb.h>      // gethostbyname
+#include "sock.h"       // Host, PortNumber, BuffSize
+
+
+// Messages to send to server
+const char* books[] = {
+  "War and Peace",
+  "Pride and Prejudice",
+  "The Sound and the Fury"
+};
+
+
+// Error-reporting helper
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1);
+}
+
+
+int main() {
+
+
+  // Create TCP socket
+  int sockfd = socket(
+      AF_INET,         // IPv4
+      SOCK_STREAM,     // TCP
+      0                // protocol chosen by OS
+  );
+
+
+  if (sockfd < 0) report("socket", 1);
+
+
+  // Resolve hostname (e.g., "localhost")
+  struct hostent* hptr = gethostbyname(Host);
+
+
+  if (!hptr) report("gethostbyname", 1);
+  if (hptr->h_addrtype != AF_INET)
+    report("bad address family", 1);
+
+
+  // Server address structure
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr));
+
+
+  saddr.sin_family = AF_INET; // IPv4
+  saddr.sin_addr.s_addr =
+      ((struct in_addr*) hptr->h_addr_list[0])->s_addr; // server IP
+  saddr.sin_port = htons(PortNumber); // server port
+
+
+  // Connect to server
+  if (connect(sockfd, (struct sockaddr*) &saddr, sizeof(saddr)) < 0)
+    report("connect", 1);
+
+
+  puts("Connect to server, about to write some stuff...");
+
+
+  // Send messages and receive echoes
+  int i;
+  for (i = 0; i < ConversationLen; i++) {
+
+
+    // Send book title to server
+    if (write(sockfd, books[i], strlen(books[i])) > 0) {
+
+
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer));
+
+
+      // Read echoed message from server
+      if (read(sockfd, buffer, sizeof(buffer)) > 0)
+        puts(buffer);
+    }
+  }
+
+
+  puts("Client done, about to exit...");
+
+
+  // Close socket
+  close(sockfd);
+
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+Below is your same code rewritten with clear inline comments explaining each important line.
+I did not change logic, only added comments (and noted issues where relevant).
+________________
+
+
+🖥️ SOCKET SERVER (with inline comments)
+// Socket server
+
+
+#include <string.h>     // memset, strlen
+#include <stdio.h>      // printf, perror, puts
+#include <stdlib.h>     // exit
+#include <unistd.h>     // read, write, close
+#include <sys/types.h>  // data types
+#include <sys/socket.h> // socket APIs
+#include <netinet/tcp.h>// TCP definitions
+#include <arpa/inet.h>  // htons, htonl, inet
+#include "sock.h"       // PortNumber, BuffSize, etc.
+
+
+// Error-reporting helper function
+void report(const char* msg, int terminate) {
+  perror(msg);          // print system error message
+  if (terminate) exit(-1); // exit if fatal error
+}
+
+
+int main() {
+
+
+  // Create a TCP socket
+  int fd = socket(
+      AF_INET,          // IPv4
+      SOCK_STREAM,      // TCP (reliable stream)
+      0                 // OS chooses protocol (TCP)
+  );
+
+
+  // If socket creation fails, terminate
+  if (fd < 0) report("socket", 1);
+
+
+  // Server address structure
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr)); // clear structure
+
+
+  saddr.sin_family = AF_INET;                // IPv4
+  saddr.sin_addr.s_addr = htonl(INADDR_ANY); // accept any local IP
+  saddr.sin_port = htons(PortNumber);        // listening port
+
+
+  // Bind socket to IP + port
+  if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
+    report("bind", 1);
+
+
+  // Put socket into listening mode
+  if (listen(fd, MaxConnects) < 0)
+    report("listen", 1);
+
+
+  fprintf(stderr, "Listening on port %i for clients...\n", PortNumber);
+
+
+  // Server runs forever
+  while (1) {
+
+
+    struct sockaddr_in caddr; // client address
+    int len = sizeof(caddr);  // size of client address
+
+
+    // Accept a client connection (blocks until client connects)
+    int client_fd = accept(fd, (struct sockaddr*) &caddr, &len);
+
+
+    // If accept fails, continue running server
+    if (client_fd < 0) {
+      report("accept", 0);
+      continue;
+    }
+
+
+    // Communicate with client
+    int i;
+    for (i = 0; i < ConversationLen; i++) {
+
+
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer)); // clear buffer
+
+
+      // Read data from client
+      int count = read(client_fd, buffer, sizeof(buffer));
+
+
+      if (count > 0) {
+        puts(buffer); // print received message
+
+
+        // Echo message back to client
+        // NOTE: better to use "count" instead of sizeof(buffer)
+        write(client_fd, buffer, sizeof(buffer));
+      }
+    }
+
+
+    // Close connection with client
+    close(client_fd);
+  }
+
+
+  return 0;
+}
+
+
+________________
+
+
+💻 SOCKET CLIENT (with inline comments)
+// Socket client
+
+
+#include <string.h>     // strlen, memset
+#include <stdio.h>      // puts, perror
+#include <stdlib.h>     // exit
+#include <unistd.h>     // read, write, close
+#include <sys/types.h>  // data types
+#include <sys/socket.h> // socket APIs
+#include <arpa/inet.h>  // inet, htons
+#include <netinet/in.h> // sockaddr_in
+#include <netinet/tcp.h>// TCP definitions
+#include <netdb.h>      // gethostbyname
+#include "sock.h"       // Host, PortNumber, BuffSize
+
+
+// Messages to send to server
+const char* books[] = {
+  "War and Peace",
+  "Pride and Prejudice",
+  "The Sound and the Fury"
+};
+
+
+// Error-reporting helper
+void report(const char* msg, int terminate) {
+  perror(msg);
+  if (terminate) exit(-1);
+}
+
+
+int main() {
+
+
+  // Create TCP socket
+  int sockfd = socket(
+      AF_INET,         // IPv4
+      SOCK_STREAM,     // TCP
+      0                // protocol chosen by OS
+  );
+
+
+  if (sockfd < 0) report("socket", 1);
+
+
+  // Resolve hostname (e.g., "localhost")
+  struct hostent* hptr = gethostbyname(Host);
+
+
+  if (!hptr) report("gethostbyname", 1);
+  if (hptr->h_addrtype != AF_INET)
+    report("bad address family", 1);
+
+
+  // Server address structure
+  struct sockaddr_in saddr;
+  memset(&saddr, 0, sizeof(saddr));
+
+
+  saddr.sin_family = AF_INET; // IPv4
+  saddr.sin_addr.s_addr =
+      ((struct in_addr*) hptr->h_addr_list[0])->s_addr; // server IP
+  saddr.sin_port = htons(PortNumber); // server port
+
+
+  // Connect to server
+  if (connect(sockfd, (struct sockaddr*) &saddr, sizeof(saddr)) < 0)
+    report("connect", 1);
+
+
+  puts("Connect to server, about to write some stuff...");
+
+
+  // Send messages and receive echoes
+  int i;
+  for (i = 0; i < ConversationLen; i++) {
+
+
+    // Send book title to server
+    if (write(sockfd, books[i], strlen(books[i])) > 0) {
+
+
+      char buffer[BuffSize + 1];
+      memset(buffer, '\0', sizeof(buffer));
+
+
+      // Read echoed message from server
+      if (read(sockfd, buffer, sizeof(buffer)) > 0)
+        puts(buffer);
+    }
+  }
+
+
+  puts("Client done, about to exit...");
+
+
+  // Close socket
+  close(sockfd);
+
+
+  return 0;
+}
+
+
+________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Below is a clear, step-by-step explanation of both programs. Together, they demonstrate Inter-Process Communication (IPC) using System V Shared Memory on Linux/Unix.
+________________
+
+
+1️⃣ Shared Memory – Writer Process
+This program creates shared memory and writes data into it.
+Header Files
+#include <iostream>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+
+
+* <sys/ipc.h> → IPC key definitions
+
+* <sys/shm.h> → Shared memory functions
+
+* <iostream> / <stdio.h> → Input/output
+
+________________
+
+
+Main Function
+int main()
+{
+
+
+________________
+
+
+Generate a Unique Key
+key_t key = ftok("shmfile",65);
+
+
+   * ftok() generates a unique key
+
+   * "shmfile" → an existing file used as a reference
+
+   * 65 → project identifier
+
+   * Same key must be used by writer and reader
+
+________________
+
+
+Create Shared Memory
+int shmid = shmget(key,1024,0666|IPC_CREAT);
+
+
+      * 1024 → size of shared memory (1 KB)
+
+      * 0666 → read & write permissions
+
+      * IPC_CREAT → create memory if it doesn’t exist
+
+      * Returns shared memory ID (shmid)
+
+________________
+
+
+Attach Shared Memory
+char *str = (char*) shmat(shmid,(void*)0,0);
+
+
+         * Attaches shared memory to process address space
+
+         * str now points to shared memory
+
+________________
+
+
+Write Data to Shared Memory
+cout<<"Write Data : ";
+gets(str);
+
+
+            * Takes input from user
+
+            * Stores it directly in shared memory
+
+⚠ Warning:
+ gets() is unsafe and deprecated (buffer overflow risk).
+Use instead:
+fgets(str,1024,stdin);
+
+
+________________
+
+
+Display Written Data
+printf("Data written in memory: %s\n",str);
+
+
+________________
+
+
+Detach Shared Memory
+shmdt(str);
+
+
+               * Detaches memory from writer process
+
+________________
+
+
+End Program
+return 0;
+}
+
+
+________________
+
+
+2️⃣ Shared Memory – Reader Process
+This program reads data written by the writer.
+________________
+
+
+Generate Same Key
+key_t key = ftok("shmfile",65);
+
+
+                  * Must match the writer’s key
+
+________________
+
+
+Access Existing Shared Memory
+int shmid = shmget(key,1024,0666|IPC_CREAT);
+
+
+                     * Gets the same shared memory block
+
+________________
+
+
+Attach Shared Memory
+char *str = (char*) shmat(shmid,(void*)0,0);
+
+
+________________
+
+
+Read Data
+printf("Data read from memory: %s\n",str);
+
+
+                        * Reads data written by writer process
+
+________________
+
+
+Detach Shared Memory
+shmdt(str);
+
+
+________________
+
+
+Destroy Shared Memory
+shmctl(shmid,IPC_RMID,NULL);
+
+
+                           * Deletes shared memory from system
+
+                           * Prevents memory leaks
+
+________________
+
+
+End Program
+return 0;
+}
+
+
+________________
+
+
+🔄 How the Two Programs Work Together
+                              1. Writer process
+
+                                 * Creates shared memory
+
+                                 * Writes user input into it
+
+                                    2. Reader process
+
+                                       * Accesses the same memory
+
+                                       * Reads and prints the data
+
+                                       * Deletes shared memory
+
+________________
+
+
+✅ Key Concepts Used
+                                          * ftok() → generates shared key
+
+                                          * shmget() → creates/gets shared memory
+
+                                          * shmat() → attaches memory
+
+                                          * shmdt() → detaches memory
+
+                                          * shmctl() → controls/deletes memory
+
+________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Below is a line-by-line explanation of the code. This program demonstrates inter-process communication (IPC) using shared memory created with mmap().
+________________
+
+
+1. Purpose of the Program
+                                             * Create a shared memory region
+
+                                             * Use fork() to create a parent and child process
+
+                                             * Both processes read from and write to the same memory
+
+                                             * Show that changes made by one process are visible to the other
+
+________________
+
+
+2. Header Files
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+
+
+                                                * stdio.h → printf
+
+                                                * stdlib.h → general utilities
+
+                                                * sys/mman.h → mmap(), memory mapping constants
+
+Later:
+#include <string.h>
+#include <unistd.h>
+
+
+                                                   * string.h → memcpy
+
+                                                   * unistd.h → fork(), sleep()
+
+________________
+
+
+3. Shared Memory Creation Function
+void* create_shared_memory(size_t size)
+
+
+This function creates and returns a shared memory region of size bytes.
+________________
+
+
+3.1 Memory Protection Flags
+int protection = PROT_READ | PROT_WRITE;
+
+
+                                                      * Memory can be read and written
+
+                                                      * Required since both processes modify the memory
+
+________________
+
+
+3.2 Visibility / Sharing Flags
+int visibility = MAP_SHARED | MAP_ANONYMOUS;
+
+
+                                                         * MAP_SHARED
+
+                                                            * Memory is shared between processes
+
+                                                            * Changes are visible to all processes using it
+
+                                                               * MAP_ANONYMOUS
+
+                                                                  * Memory is not backed by a file
+
+                                                                  * Exists only in RAM
+
+                                                                  * Automatically initialized to zero
+
+📌 This makes the memory visible only to this process and its children
+________________
+
+
+3.3 Calling mmap()
+return mmap(NULL, size, protection, visibility, -1, 0);
+
+
+                                                                     * NULL → let OS choose address
+
+                                                                     * size → size of shared memory
+
+                                                                     * protection → read/write
+
+                                                                     * visibility → shared, anonymous
+
+                                                                     * -1 → no file descriptor (required for anonymous mapping)
+
+                                                                     * 0 → offset (unused here)
+
+🔹 Returns a pointer to shared memory
+________________
+
+
+4. Main Function
+int main() {
+
+
+________________
+
+
+4.1 Messages
+char parent_message[] = "hello";
+char child_message[] = "goodbye";
+
+
+                                                                        * Parent writes "hello"
+
+                                                                        * Child overwrites it with "goodbye"
+
+________________
+
+
+4.2 Create Shared Memory
+void* shmem = create_shared_memory(128);
+
+
+                                                                           * Allocates 128 bytes of shared memory
+
+                                                                           * shmem points to the shared region
+
+________________
+
+
+4.3 Parent Writes First
+memcpy(shmem, parent_message, sizeof(parent_message));
+
+
+                                                                              * Copies "hello" into shared memory
+
+                                                                              * Happens before fork(), so both processes see it
+
+________________
+
+
+5. Process Creation
+int pid = fork();
+
+
+                                                                                 * Creates a child process
+
+                                                                                 * Returns:
+
+                                                                                    * 0 → child process
+
+                                                                                    * >0 → parent process
+
+________________
+
+
+6. Child Process Code
+if (pid == 0) {
+
+
+6.1 Child Reads Shared Memory
+printf("Child read: %s\n", shmem);
+
+
+                                                                                       * Child prints what parent wrote
+
+                                                                                       * Output:
+
+Child read: hello
+                                                                                          * ________________
+
+
+6.2 Child Writes New Message
+memcpy(shmem, child_message, sizeof(child_message));
+
+
+                                                                                          * Overwrites shared memory with "goodbye"
+
+________________
+
+
+6.3 Child Confirms Write
+printf("Child wrote: %s\n", shmem);
+
+
+                                                                                             * Output:
+
+Child wrote: goodbye
+                                                                                                * ________________
+
+
+7. Parent Process Code
+else {
+
+
+7.1 Parent Reads Immediately
+printf("Parent read: %s\n", shmem);
+
+
+                                                                                                * Usually prints:
+
+Parent read: hello
+                                                                                                   * ________________
+
+
+7.2 Parent Waits
+sleep(1);
+
+
+                                                                                                   * Gives child time to modify shared memory
+
+________________
+
+
+7.3 Parent Reads Again
+printf("After 1s, parent read: %s\n", shmem);
+
+
+                                                                                                      * Now sees child’s update:
+
+After 1s, parent read: goodbye
+                                                                                                         * ________________
+
+
+8. Key Concepts Demonstrated
+✅ Shared Memory with mmap()
+                                                                                                         * Faster than pipes or message queues
+
+                                                                                                         * No kernel copying after setup
+
+✅ Inheritance Across fork()
+                                                                                                            * Child inherits memory mappings
+
+                                                                                                            * MAP_SHARED allows true data sharing
+
+⚠️ No Synchronization
+                                                                                                               * No locks or semaphores
+
+                                                                                                               * Race conditions possible in real programs
+
+________________
+
+
+9. Expected Output (Typical)
+Parent read: hello
+Child read: hello
+Child wrote: goodbye
+After 1s, parent read: goodbye
+
+
+(Order may vary slightly due to scheduling.)
+________________
+
+
+10. Summary
+Component
+	Purpose
+	mmap()
+	Allocate shared memory
+	MAP_SHARED
+	Share memory between processes
+	fork()
+	Create child process
+	memcpy()
+	Write into shared memory
+	sleep()
+	Synchronize output timing
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+This is a C program demonstrating inter-process communication (IPC) using a pipe between a parent and a child process.
+I’ll explain it step by step, and also point out typos / issues so you understand what it intends to do.
+________________
+
+
+1. Purpose of the program
+                                                                                                                  * Create a pipe
+
+                                                                                                                  * Fork a child process
+
+                                                                                                                  * Parent writes a message into the pipe
+
+                                                                                                                  * Child reads the message from the pipe and prints it
+
+This is a classic UNIX pipe + fork example.
+________________
+
+
+2. Header files and macros
+#include <string.h>
+#include <unistd.h>
+
+
+                                                                                                                     * string.h → for strlen()
+
+                                                                                                                     * unistd.h → for pipe(), fork(), read(), write(), close()
+
+⚠️ Missing but required:
+#include <stdio.h>
+#include <sys/types.h>
+
+
+________________
+
+
+Macros
+#define BUFFER SIZE 25
+#define READ END 0
+#define WRITE END 1
+
+
+⚠️ These have syntax errors. Correct versions:
+#define BUFFER_SIZE 25
+#define READ_END 0
+#define WRITE_END 1
+
+
+                                                                                                                        * BUFFER_SIZE → size of message buffer
+
+                                                                                                                        * READ_END → index for reading from pipe
+
+                                                                                                                        * WRITE_END → index for writing to pipe
+
+________________
+
+
+3. Variable declarations
+char write msg[BUFFER SIZE] = "Greetings";
+char read msg[BUFFER SIZE];
+int fd[2];
+pid t pid;
+
+
+⚠️ These contain typos. Correct version:
+char write_msg[BUFFER_SIZE] = "Greetings";
+char read_msg[BUFFER_SIZE];
+int fd[2];
+pid_t pid;
+
+
+Meaning:
+                                                                                                                           * write_msg → message parent sends
+
+                                                                                                                           * read_msg → buffer child reads into
+
+                                                                                                                           * fd[2] → file descriptors for the pipe
+
+                                                                                                                              * fd[0] → read end
+
+                                                                                                                              * fd[1] → write end
+
+                                                                                                                                 * pid → process ID returned by fork()
+
+________________
+
+
+4. Creating the pipe
+if (pipe(fd) == -1) {
+    fprintf(stderr,"Pipe failed");
+    return 1;
+}
+
+
+                                                                                                                                    * pipe(fd) creates a unidirectional communication channel
+
+                                                                                                                                    * After this:
+
+                                                                                                                                       * fd[0] → read end
+
+                                                                                                                                       * fd[1] → write end
+
+                                                                                                                                          * If it fails, program exits
+
+________________
+
+
+5. Forking the process
+pid = fork();
+
+
+                                                                                                                                             * Creates a child process
+
+                                                                                                                                             * Return values:
+
+                                                                                                                                                * < 0 → error
+
+                                                                                                                                                * 0 → child process
+
+                                                                                                                                                * > 0 → parent process
+
+________________
+
+
+Error handling
+if (pid < 0) {
+    fprintf(stderr, "Fork Failed");
+    return 1;
+}
+
+
+________________
+
+
+6. Parent process (pid > 0)
+if (pid > 0) {
+    close(fd[READ_END]);
+    write(fd[WRITE_END], write_msg, strlen(write_msg) + 1);
+    close(fd[WRITE_END]);
+}
+
+
+What happens:
+                                                                                                                                                   1. Parent closes the read end (it won’t read)
+
+                                                                                                                                                   2. Writes "Greetings" into the pipe
+
+                                                                                                                                                   3. +1 includes the null terminator
+
+                                                                                                                                                   4. Closes the write end after sending
+
+________________
+
+
+7. Child process (pid == 0)
+else {
+    close(fd[WRITE_END]);
+    read(fd[READ_END], read_msg, BUFFER_SIZE);
+    printf("read %s", read_msg);
+    close(fd[READ_END]);
+}
+
+
+What happens:
+                                                                                                                                                      1. Child closes the write end (it won’t write)
+
+                                                                                                                                                      2. Reads data from the pipe into read_msg
+
+                                                                                                                                                      3. Prints the received message
+
+                                                                                                                                                      4. Closes the read end
+
+________________
+
+
+8. Program output
+read Greetings
+
+
+(The child prints this.)
+________________
+
+
+9. Summary (in simple words)
+Step
+	Description
+	1
+	Create a pipe
+	2
+	Fork a child
+	3
+	Parent writes message to pipe
+	4
+	Child reads message from pipe
+	5
+	Child prints the message
+	
+
+10. Corrected full version (for reference)
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+
+#define BUFFER_SIZE 25
+#define READ_END 0
+#define WRITE_END 1
+
+
+int main(void)
+{
+    char write_msg[BUFFER_SIZE] = "Greetings";
+    char read_msg[BUFFER_SIZE];
+    int fd[2];
+    pid_t pid;
+
+
+    if (pipe(fd) == -1) {
+        fprintf(stderr, "Pipe failed");
+        return 1;
+    }
+
+
+    pid = fork();
+
+
+    if (pid < 0) {
+        fprintf(stderr, "Fork Failed");
+        return 1;
+    }
+
+
+    if (pid > 0) {  // Parent
+        close(fd[READ_END]);
+        write(fd[WRITE_END], write_msg, strlen(write_msg) + 1);
+        close(fd[WRITE_END]);
+    } else {        // Child
+        close(fd[WRITE_END]);
+        read(fd[READ_END], read_msg, BUFFER_SIZE);
+        printf("read %s\n", read_msg);
+        close(fd[READ_END]);
+    }
+
+
+    return 0;
+}
+
+
+________________
