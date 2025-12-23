@@ -1,29 +1,24 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <string.h>
 
-int main(){
-	FILE *fs, *ft ;
-	char ch;
-	fs = fopen("helloworld.c", "r");
-	ft = fopen("hello.c", "w");
+int main() {
+    FILE *fp = fopen("hello.c", "w");
 
-	while(1)
-	{
-		ch = fgetc(fs);
-		if(ch == EOF)
-		{
-			break;
-		}
-		else
-		{
-			fputc(ch, ft);
-		}
-	}
+    if (fp == NULL) {
+        return 1;
+    }
 
-	fclose(fs);
-	fclose(ft);
+    char str[] =
+        "#include <stdio.h>\n\n"
+        "int main() {\n"
+        "    printf(\"hello world!\\n\");\n"
+        "    return 0;\n"
+        "}\n";
 
-	printf("\ncopied sucessfully \n");
+    fwrite(str, 1, strlen(str), fp);
 
+    fclose(fp);
 
-	
+    return 0;
 }
+
