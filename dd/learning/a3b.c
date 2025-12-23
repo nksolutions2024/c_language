@@ -4,7 +4,6 @@
 
 int main() {
     int fd;
-
 	
     fd = open("hello.c", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd < 0) 
