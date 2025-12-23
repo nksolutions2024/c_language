@@ -56,12 +56,12 @@ int main()
         exit(0);
     }
 
-    // ---------------- PARENT PROCESS ----------------
+    // ---------------- PARENT PROCESS S----------------
     else
     {
         close(fd[READ_END]);   // Close read end
 
-        file = open("/usr/include/stdio.h", O_RDONLY);
+        file = open("q1os.c", O_RDONLY);
         if (file < 0)
         {
             perror("File open failed");
