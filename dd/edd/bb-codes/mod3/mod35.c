@@ -14,7 +14,7 @@
 
 #define MY_CLASS_NAME	"cdac_cls"
 #define MY_DEV_NAME	"cdac_dev"
-#define MY_KBUF_SZ	(1024)
+#define MY_KBUF_SZ	(8)
 
 dev_t dev = 0;
 static struct class *dev_class;
