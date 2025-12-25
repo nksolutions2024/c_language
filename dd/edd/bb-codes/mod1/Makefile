@@ -1,4 +1,4 @@
 obj-m  += mod1.o
 
-all:
+optionA:
 	make -C ../../linux  M=$(shell pwd) modules
