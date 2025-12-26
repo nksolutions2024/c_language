@@ -1,4 +1,4 @@
-obj-m  += mod91.o mod92.o mod93.o
+obj-m  += mod91.o
  
 ifdef ARCH
   #You can update your Beaglebone path here.
