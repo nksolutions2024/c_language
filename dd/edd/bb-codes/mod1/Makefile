@@ -1,4 +1,5 @@
 obj-m  += mod1.o
 
-optionA:
-	make -C ../../linux M=/home/kite/hup/c_language/dd/edd/bb-codes/mod1 modules
+obj-m += mod8.o mod12.o
+
+obj-m += mod16.o
