@@ -19,8 +19,8 @@ int main(){
 
 	struct operations var_of_struct;
 	struct input *firstinput;
-	firstinput = (struct input*)malloc(sizeof(struct input));
-	firstinput -> num1 = 4.4;
+	firstinput = malloc(sizeof(struct input));
+	firstinput -> num1 = 4.16;
 	firstinput -> num2 = 4.8;
 
 	var_of_struct.addition = add;
@@ -36,8 +36,7 @@ int main(){
 
 float add(void *struct_ptr){
 	struct input *temp;
-	temp = (struct input*)malloc(sizeof(struct input));
-	temp = struct_ptr;
-	printf("num1 num2 --%f %f\n", temp->num1, temp->num2);
+	temp = (struct input*)struct_ptr;
+	printf("num1 num2 -- %f %f\n", temp->num1, temp->num2);
 	return (temp->num1 + temp->num2);
 }
