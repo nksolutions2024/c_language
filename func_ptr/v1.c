@@ -4,6 +4,18 @@ void say_hello(){
 	printf("hhello\n");
 }
 
+void say_bye(){
+	printf("ggoodbye\n");
+}
+
 int main(){
-	say_hello();
+	void (*func)();
+	func = say_hello;
+
+	func();
+
+
+//	say_hello();
+
+//	say_bye();
 }
