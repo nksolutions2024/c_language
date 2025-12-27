@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 float add(void *);
 
@@ -18,6 +19,7 @@ int main(){
 
 	struct operations var_of_struct;
 	struct input *firstinput;
+	firstinput = (struct input*)malloc(sizeof(struct input));
 	firstinput -> num1 = 4.4;
 	firstinput -> num2 = 4.8;
 
@@ -34,6 +36,7 @@ int main(){
 
 float add(void *struct_ptr){
 	struct input *temp;
+	temp = (struct input*)malloc(sizeof(struct input));
 	temp = (struct input*)struct_ptr;
 	return (temp->num1 + temp->num2);
 }
