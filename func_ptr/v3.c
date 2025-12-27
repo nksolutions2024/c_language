@@ -1,10 +1,15 @@
 #include<stdio.h>
 
-float add(float, float);
+float add(void *);
 
 struct operations{
-	float (*addition)(float, float);
+	float (*addition)(void*);
 	float (*subtraction)(float, float);
+};
+
+struct input{
+	float num1;
+	float num2;
 };
 
 int main(){
@@ -12,11 +17,14 @@ int main(){
 	float j=8.8;
 
 	struct operations var_of_struct;
+	struct input *firstinput;
+	firstinput -> num1 = 4.4;
+	firstinput -> num2 = 4.8;
 
 	var_of_struct.addition = add;
 
 	float result;
-	resullt	= var_of_struct.addition(k,j);
+	result	= var_of_struct.addition(&firstinput);
 
 //	float result = add(k,j);
 
@@ -24,6 +32,8 @@ int main(){
 
 }
 
-float add(float a, float b){
-	return a+b;
+float add(void *struct_ptr){
+	struct input *temp;
+	temp = (struct input*)struct_ptr;
+	return (temp->num1 + temp->num2);
 }
