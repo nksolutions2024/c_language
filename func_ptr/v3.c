@@ -26,7 +26,7 @@ int main(){
 	var_of_struct.addition = add;
 
 	float result;
-	result	= var_of_struct.addition(&firstinput);
+	result	= var_of_struct.addition(firstinput);
 
 //	float result = add(k,j);
 
@@ -37,6 +37,7 @@ int main(){
 float add(void *struct_ptr){
 	struct input *temp;
 	temp = (struct input*)malloc(sizeof(struct input));
-	temp = (struct input*)struct_ptr;
+	temp = struct_ptr;
+	printf("num1 num2 --%f %f\n", temp->num1, temp->num2);
 	return (temp->num1 + temp->num2);
 }
