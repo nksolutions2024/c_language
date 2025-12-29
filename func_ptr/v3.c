@@ -31,6 +31,7 @@ int main(){
 //	float result = add(k,j);
 
 	printf("%f\n", result);
+	free(firstinput);
 
 }
 

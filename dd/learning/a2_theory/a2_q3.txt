@@ -1,0 +1,58 @@
+﻿Transferring files between an Ubuntu host and a BeagleBone Black (BBB) is most commonly done using Secure Copy Protocol (SCP) or Secure File Transfer Protocol (SFTP), as these leverage the SSH connection already present on most embedded Linux systems.
+Assuming your BeagleBone Black is connected via USB (default IP 192.168.7.2) or Ethernet, here are the commands to move your files.
+________________
+1. Ubuntu PC (Host) → BeagleBone Black
+To push a file from your computer to the BeagleBone, use the scp command from your Ubuntu terminal.
+Syntax:
+scp [path_to_local_file] [user]@[remote_ip]:[destination_directory]
+Example:
+If you want to move a script named blink.py from your home folder to the /home/debian folder on the BBB:
+
+
+Bash
+
+
+
+
+scp ~/blink.py debian@192.168.7.2:/home/debian
+
+* Note: You will be prompted for the password for the debian user (usually temppwd).
+________________
+2. BeagleBone Black → Ubuntu PC (Reverse)
+To pull a file from the BeagleBone back to your Ubuntu machine, you still run the command from your Ubuntu terminal, but you reverse the source and destination.
+Syntax:
+scp [user]@[remote_ip]:[path_to_remote_file] [path_to_local_destination]
+Example:
+If you want to copy a log file named data.txt from the BBB to your current working directory on Ubuntu:
+
+
+Bash
+
+
+
+
+scp debian@192.168.7.2:/home/debian/data.txt .
+
+(The . at the end represents your current directory on the Ubuntu PC).
+________________
+Alternative: Using a Graphical Interface (SFTP)
+If you prefer a visual "drag-and-drop" method rather than the command line, Ubuntu’s default file manager (Nautilus) makes this very easy:
+1. Open Files (Nautilus) on Ubuntu.
+2. Click on + Other Locations at the bottom of the sidebar.
+3. In the "Connect to Server" box at the bottom, type:
+sftp://192.168.7.2
+4. Enter your BeagleBone credentials when prompted. The BBB filesystem will appear like a USB drive.
+________________
+Pro-Tip: Transferring Folders
+If you need to transfer an entire directory, simply add the -r (recursive) flag to the scp command:
+
+
+Bash
+
+
+
+
+# Copy an entire folder to the BBB
+scp -r ~/my_project debian@192.168.7.2:/home/debian
+
+Would you like to know how to set up SSH Keys so you can transfer these files without typing your password every time?

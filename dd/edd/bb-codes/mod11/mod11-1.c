@@ -32,6 +32,7 @@ static ssize_t mode_show(struct kobject *kobj, struct kobj_attribute *attr, char
    }
 }
 
+//understand ; retry
 static ssize_t mode_store(struct kobject *kobj, struct kobj_attribute *attr, const char *buf, size_t count){
    if (strncmp(buf,"on",count-1)==0) { mode = ON; }   
    else if (strncmp(buf,"off",count-1)==0) { mode = OFF; }

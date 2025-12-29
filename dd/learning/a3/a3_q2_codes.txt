@@ -1,0 +1,197 @@
+﻿(a)
+#include <stdio.h>
+
+
+float add(float a, float b)       { return a + b; }
+float sub(float a, float b)       { return a - b; }
+float mul(float a, float b)       { return a * b; }
+float divide(float a, float b)    { return (b != 0) ? a / b : 0; }
+
+
+int main() {
+    float (*op)(float, float);
+
+
+    op = add;
+    printf("Add: %.2f\n", op(4.0, 2.0));
+
+
+    op = sub;
+    printf("Sub: %.2f\n", op(4.0, 2.0));
+
+
+    op = mul;
+    printf("Mul: %.2f\n", op(4.0, 2.0));
+
+
+    op = divide;
+    printf("Div: %.2f\n", op(4.0, 2.0));
+
+
+    return 0;
+}
+
+
+(b) Calculator using struct of function pointers
+
+
+#include <stdio.h>
+
+
+float add(float a, float b)    { return a + b; }
+float sub(float a, float b)    { return a - b; }
+float mul(float a, float b)    { return a * b; }
+float divide(float a, float b){ return (b != 0) ? a / b : 0; }
+
+
+struct calculator {
+    float (*add)(float, float);
+    float (*sub)(float, float);
+    float (*mul)(float, float);
+    float (*div)(float, float);
+};
+
+
+int main() {
+    struct calculator calc = { add, sub, mul, divide };
+
+
+    printf("Add: %.2f\n", calc.add(3.0, 2.0));
+    printf("Sub: %.2f\n", calc.sub(3.0, 2.0));
+    printf("Mul: %.2f\n", calc.mul(3.0, 2.0));
+    printf("Div: %.2f\n", calc.div(3.0, 2.0));
+
+
+    return 0;
+}
+
+
+(c) Calculator using void pointer input 
+
+
+
+
+Operations via void *
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct input {
+    float num1;
+    float num2;
+};
+
+
+float add(void *data) {
+    struct input *in = (struct input *)data;
+    return in->num1 + in->num2;
+}
+
+
+float sub(void *data) {
+    struct input *in = (struct input *)data;
+    return in->num1 - in->num2;
+}
+
+
+struct operations {
+    float (*add)(void *);
+    float (*sub)(void *);
+};
+
+
+int main() {
+    struct operations ops = { add, sub };
+
+
+    struct input *values = malloc(sizeof(struct input));
+    values->num1 = 10.0;
+    values->num2 = 5.0;
+
+
+    printf("Add: %.2f\n", ops.add(values));
+    printf("Sub: %.2f\n", ops.sub(values));
+
+
+    free(values);
+    return 0;
+}
+
+
+(d) Add support for sin, cos, tan
+
+
+Unary operations (float → float) require different function signatures.
+
+
+#include <stdio.h>
+#include <math.h>
+
+
+float mysin(float x) { return sinf(x); }
+float mycos(float x) { return cosf(x); }
+float mytan(float x) { return tanf(x); }
+
+
+struct trig_ops {
+    float (*sin)(float);
+    float (*cos)(float);
+    float (*tan)(float);
+};
+
+
+int main() {
+    struct trig_ops t = { mysin, mycos, mytan };
+
+
+    float angle = 0.5f;  // radians
+    printf("sin: %.2f\n", t.sin(angle));
+    printf("cos: %.2f\n", t.cos(angle));
+    printf("tan: %.2f\n", t.tan(angle));
+
+
+    return 0;
+}
+
+
+(e) Simplified unified struct
+Final simplified struct 
+
+
+struct ops {
+    float (*unary_op)(float);
+    float (*binary_op)(float, float);
+};
+
+
+
+
+#include <stdio.h>
+#include <math.h>
+
+
+float add(float a, float b) { return a + b; }
+float mul(float a, float b) { return a * b; }
+float mysin(float x)        { return sinf(x); }
+
+
+int main() {
+    struct ops binary, unary;
+
+
+    binary.binary_op = add;
+    unary.unary_op   = mysin;
+
+
+    printf("Add: %.2f\n", binary.binary_op(3.0, 4.0));
+    printf("Sin: %.2f\n", unary.unary_op(0.5));
+
+
+    binary.binary_op = mul;
+    printf("Mul: %.2f\n", binary.binary_op(3.0, 4.0));
+
+
+    return 0;
+}
