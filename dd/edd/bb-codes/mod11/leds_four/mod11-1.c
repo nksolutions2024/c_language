@@ -22,6 +22,9 @@ module_param(blinkPeriod, uint, S_IRUGO | S_IWUSR);
 MODULE_PARM_DESC(blinkPeriod, "LED blink period in ms (min=1, default=1000, max=10000)");
 
 static char ledName[10] = {0};
+static char ledName1[10] = {0};
+static char ledName2[10] = {0};
+static char ledName3[10] = {0};
 static bool ledOn = 0;                      
 enum modes { OFF, ON, FLASH };          // LED modes    
 static enum modes mode = FLASH;		// default LED mode
@@ -85,7 +88,10 @@ static int flash_led(void *arg)
       else if (mode==ON) ledOn = true;
       else ledOn = false;
 
-      gpio_set_value(gpioLED, ledOn);      
+      gpio_set_value(gpioLED, ledOn);
+      gpio_set_value(gpioLED1, ledOn);
+      gpio_set_value(gpioLED2, ledOn);
+      gpio_set_value(gpioLED3, ledOn);      
 					   
       msleep(blinkPeriod/2);                
    }
@@ -98,12 +104,15 @@ static int __init my_init(void){
    int result = 0;
 
    sprintf(ledName, "led%d", gpioLED);
-   sprintf(ledName, "led1%d", gpioLED1);
-   sprintf(ledName, "led2%d", gpioLED2);
-   sprintf(ledName, "led3%d", gpioLED3);  
-   pr_info("Initializinging GPIO LED %s...\n", ledName);
+   sprintf(ledName1, "led1%d", gpioLED1);
+   sprintf(ledName2, "led2%d", gpioLED2);
+   sprintf(ledName3, "led3%d", gpioLED3);  
+   pr_info("Initializing GPIO LED %s...\n", ledName);
+   pr_info("Initializing GPIO LED %s...\n", ledName1);
+   pr_info("Initializing GPIO LED %s...\n", ledName2);
+   pr_info("Initializing GPIO LED %s...\n", ledName3);
 
-   kobj_ref = kobject_create_and_add("cdac_led", NULL); // kernel_kobj points to /sys/cdac_edd
+   kobj_ref = kobject_create_and_add("cdac_led", NULL); // kernel_kobj points to /sys/cdac_led
    if(!kobj_ref){
       pr_err("Failed to create kobject\n");
       return -ENOMEM;
@@ -116,7 +125,25 @@ static int __init my_init(void){
       goto r_sys_grp;
    }
 
-   result = gpio_request(gpioLED, "sysfs");          
+   result = gpio_request(gpioLED, "sysfs");          //purpose not yet known
+   if (result<0)
+   {
+      pr_err("Error in gpio request!\n");
+      goto r_gpio_req;
+   } 
+   result = gpio_request(gpioLED1, "sysfs");          //purpose not yet known
+   if (result<0)
+   {
+      pr_err("Error in gpio request!\n");
+      goto r_gpio_req;
+   } 
+   result = gpio_request(gpioLED2, "sysfs");          //purpose not yet known
+   if (result<0)
+   {
+      pr_err("Error in gpio request!\n");
+      goto r_gpio_req;
+   } 
+   result = gpio_request(gpioLED3, "sysfs");          //purpose not yet known
    if (result<0)
    {
       pr_err("Error in gpio request!\n");
@@ -124,7 +151,10 @@ static int __init my_init(void){
    } 
 
    ledOn = true;
-   gpio_direction_output(gpioLED, ledOn);   
+   gpio_direction_output(gpioLED, ledOn);
+   gpio_direction_output(gpioLED1, ledOn);
+   gpio_direction_output(gpioLED2, ledOn);
+   gpio_direction_output(gpioLED3, ledOn);   
    gpio_export(gpioLED, false);  		// export in /sys/class/gpio/...
 
    task = kthread_run(flash_led, NULL, "LED blink thread"); 
@@ -138,8 +168,15 @@ static int __init my_init(void){
 
 r_task:
    gpio_set_value(gpioLED, 0);
+   gpio_set_value(gpioLED1, 0);//failure maybe
+   gpio_set_value(gpioLED2, 0);
+   gpio_set_value(gpioLED3, 0);
+
    gpio_unexport(gpioLED);
    gpio_free(gpioLED);
+   gpio_free(gpioLED1);
+   gpio_free(gpioLED2);
+   gpio_free(gpioLED3);
 r_gpio_req:
    sysfs_remove_group(kobj_ref, &attr_group);
 r_sys_grp:
@@ -153,8 +190,14 @@ static void __exit my_exit(void)
    kthread_stop(task);
 
    gpio_set_value(gpioLED, 0);              
+   gpio_set_value(gpioLED1, 0);//failure maybe
+   gpio_set_value(gpioLED2, 0);
+   gpio_set_value(gpioLED3, 0);
    gpio_unexport(gpioLED);                  
    gpio_free(gpioLED);                      
+   gpio_free(gpioLED1);
+   gpio_free(gpioLED2);
+   gpio_free(gpioLED3);
    pr_info("GPIO %d freed up\n", gpioLED);
 
    sysfs_remove_group(kobj_ref, &attr_group);   
