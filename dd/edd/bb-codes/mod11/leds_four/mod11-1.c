@@ -11,8 +11,11 @@
 
 static struct kobject *kobj_ref;            
 static struct task_struct *task;            
-					    
-static unsigned int gpioLED = 47;          
+				
+static unsigned int gpioLED1 = 60;
+static unsigned int gpioLED2 = 48;
+static unsigned int gpioLED3 = 49;
+static unsigned int gpioLED  = 47;          
 
 static unsigned int blinkPeriod = 1000;     // in msecs
 module_param(blinkPeriod, uint, S_IRUGO | S_IWUSR);   
@@ -94,8 +97,11 @@ static int flash_led(void *arg)
 static int __init my_init(void){
    int result = 0;
 
-   sprintf(ledName, "led%d", gpioLED);  
-   pr_info("Init'ing GPIO LED %s...\n", ledName);
+   sprintf(ledName, "led%d", gpioLED);
+   sprintf(ledName, "led1%d", gpioLED1);
+   sprintf(ledName, "led2%d", gpioLED2);
+   sprintf(ledName, "led3%d", gpioLED3);  
+   pr_info("Initializinging GPIO LED %s...\n", ledName);
 
    kobj_ref = kobject_create_and_add("cdac_led", NULL); // kernel_kobj points to /sys/cdac_edd
    if(!kobj_ref){

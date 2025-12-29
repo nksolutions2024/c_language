@@ -35,6 +35,7 @@ static int __init my_init(void){
 
    gpio_request(gpioButton, "sysfs"); 
    gpio_direction_input(gpioButton); // input kkkkkkkkkkkkk debouncing
+   gpio_set_debounce(gpioButton , 200);
    irqNumber = gpio_to_irq(gpioButton);//converts the gpio into an IRQ number used by interrupt 
    pr_info("GPIO %d mapped to IRQ number %d\n", gpioButton, irqNumber);
 

@@ -13,16 +13,16 @@
 
 #include "my_ioctls.h"
 
-#define MY_CLASS_NAME	"cdac_cls"
+#define MY_CLASS_NAME	"cdac_cls"  
 #define MY_DEV_NAME	"cdac_dev"
 
 // internal kernel variable - used for ioctl
 static unsigned int value;
 
 dev_t dev = 0;
-static struct class *dev_class;
-static struct device *cdevice;
-static struct cdev my_cdev;
+static struct class *dev_class;  // "cdac_cls" /sys/class
+static struct device *cdevice;  // device pointer is cdevice
+static struct cdev my_cdev;     // cdev-variable
 
 // function prototypes
 static int __init my_mod_init(void);
@@ -56,6 +56,9 @@ static long my_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	switch(cmd)
 	{
 		case MY_HW_READ:
+			//sequence-order-2
+			//value variable as temporary_storage 
+			//value is send to user (user see the passed thing)
 			if ( copy_to_user((unsigned int *)arg, &value, sizeof(value)) )
 			{
 				pr_err("Error reading from kernel variable\n");
@@ -63,6 +66,8 @@ static long my_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			pr_info("Kernel variable read, value = %d\n", value);
 			break;
 		case MY_HW_WRITE:
+			//sequence-order-1
+			// arugement(arg) is stored in at address=&value
 			if ( copy_from_user(&value, (unsigned int *)arg, sizeof(value)) )
 			{
 				pr_err("Error writing to kernel variable\n");
@@ -106,9 +111,9 @@ static int __init my_mod_init(void)
 	pr_info("major:minor %d:%d allotted!\n", MAJOR(dev),MINOR(dev));
 
 	// initialize a cdev
-	cdev_init(&my_cdev, &fops);
+	cdev_init(&my_cdev, &fops);//register 
 
-	ans = cdev_add(&my_cdev, dev, 1);
+	ans = cdev_add(&my_cdev, dev, 1);// alloted major-minor giving to my_cdev
 	if (ans<0)
 	{
 		pr_err("Could not add cdev to the kernel!\n");
@@ -122,6 +127,7 @@ static int __init my_mod_init(void)
 		goto r_class;
 	}
 
+	//returns pointer
 	cdevice = device_create(dev_class, NULL, dev, NULL, MY_DEV_NAME);
 	if (IS_ERR(cdevice))
 	{
