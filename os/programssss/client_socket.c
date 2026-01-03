@@ -32,7 +32,11 @@ int main(){
 	//HOST NAME RESOLVING
 	struct hostent* hptr = gethostbyname(Host);
 
-	if(hptr->h_addrtype != AF_INET);
+	if(hptr->h_addrtype != AF_INET)
+	{
+		fprintf(strerr, "Not IPv4\n");
+		exit(1);
+	}
 
 	struct sockaddr_in saddr;
 	memset(&saddr, 0, sizeof(saddr));
@@ -41,12 +45,18 @@ int main(){
 	saddr.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
 	saddr.sin_port = htons(PortNumber);
 
+	if(connect(sockfd,(struct sockaddr*) &saddr, sizeof(saddr)) < 0)
+	{
+		perror("connect");
+		exit(1);
+	}
+
 	puts("connecting to server, writing.... ");
 
 	int i;
 	for(i=0; i<ConversationLen; i++)
 	{
-		if(write(sockfd, subjects[i], strlen(subjects[i])) > 0)
+		if(write(sockfd, subjects[i], strlen(subjects[i])+1 ) > 0)
 		{
 			char buffer[BuffSize+1];
 			memset(buffer, '\0', sizeof(buffer));

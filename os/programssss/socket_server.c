@@ -29,9 +29,9 @@ int main(){
 	saddr.sin_addr.s_addr = htonl(INADDR_ANY); //host to network ;any local IP
 	saddr.sin_port = htons(PortNumber);
 
-	if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0);
+//	if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0);
 
-	if (listen(fd, MaxConnects) < 0);
+//	if (listen(fd, MaxConnects) < 0);
 
 	fprintf(stderr, "listening on port 12345 for clients....\n");
 
@@ -44,6 +44,7 @@ int main(){
 
 		if (client_fd)
 		{
+			perror("accept");
 			continue;
 		}
 
@@ -59,7 +60,7 @@ int main(){
 			{
 				puts(buffer);
 
-				write(client_fd, buffer, sizeof(buffer));
+				write(client_fd, buffer, count);
 			}
 		}
 		close(client_fd);
