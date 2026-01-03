@@ -7,6 +7,8 @@
 #include<netinet/tcp.h>
 #include<arpa/inet.h>
 
+#include<netinet/in.h>
+
 #define PortNumber 12345
 #define MaxConnects 5
 #define BuffSize 256
@@ -29,9 +31,15 @@ int main(){
 	saddr.sin_addr.s_addr = htonl(INADDR_ANY); //host to network ;any local IP
 	saddr.sin_port = htons(PortNumber);
 
-//	if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0);
+	if (bind(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
+	{
+		perror("bind");
+	}
 
-//	if (listen(fd, MaxConnects) < 0);
+	if (listen(fd, MaxConnects) < 0)
+	{
+		perror("listen");
+	}
 
 	fprintf(stderr, "listening on port 12345 for clients....\n");
 
@@ -42,7 +50,7 @@ int main(){
 
 		int client_fd = accept(fd, (struct sockaddr*) &caddr, &len);
 
-		if (client_fd)
+		if (client_fd < 0)
 		{
 			perror("accept");
 			continue;

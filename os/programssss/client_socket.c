@@ -34,7 +34,7 @@ int main(){
 
 	if(hptr->h_addrtype != AF_INET)
 	{
-		fprintf(strerr, "Not IPv4\n");
+		fprintf(stderr, "Not IPv4\n");
 		exit(1);
 	}
 
