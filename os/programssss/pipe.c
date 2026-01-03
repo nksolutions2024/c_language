@@ -32,7 +32,7 @@ int main(){
 	{
 		//parent process
 		close(fd[READ_END]);
-		write(fd[READ_END], write_msg, strlen(write_msg) + 1);
+		write(fd[WRITE_END], write_msg, strlen(write_msg) + 1);
 		close(fd[WRITE_END]);
 	}
 	else
